@@ -4,7 +4,25 @@ services:
   fastapi:
     build: .
     container_name: fastapi_server
+    working_dir: /app
     ports:
       - "8000:80"
     volumes:
       - ./app:/app
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    container_name: postgres
+    image: postgres:17.4-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./envs/postgres.env
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
