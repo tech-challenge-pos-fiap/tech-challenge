@@ -1,2 +1,2 @@
-from .base import Base
-from .product import Product
+from .base import *
+from .product import *
