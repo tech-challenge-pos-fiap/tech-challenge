@@ -29,9 +29,6 @@ pip-download-cache/
 .pytest_cache/
 htmlcov/
 
-# Alembic
-versions/
-
 # IDE-specific files
 .idea/
 .vscode/
