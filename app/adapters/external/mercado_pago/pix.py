@@ -15,7 +15,9 @@ class MercadoPagoPixClient:
             "Authorization": f"Bearer {self.MP_ACCESS_TOKEN}",
             "X-Idempotency-Key": self.MP_IDEMPOTENCY_KEY,
         }
+        print("headers", headers)
 
         response = requests.post(self.MP_PAYMENT_URL, json=payment_data, headers=headers)
+        print("response", response.json())
         response.raise_for_status()
         return response.json()

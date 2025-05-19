@@ -75,8 +75,6 @@ class PixPaymentResponseDTO(BaseModel):
             }
         }
 
-
-
 class PaymentProviderDataResponse(BaseModel):
     provider_name: str
     mp_payment_id: Optional[str]
@@ -91,12 +89,14 @@ class PaymentProviderDataResponse(BaseModel):
         orm_mode = True
 
 class PaymentResponse(BaseModel):
-    id: int
-    transaction_amount: Decimal
-    description: Optional[str]
-    payment_method_id: str
-    status: str
-    provider_data: Optional[PaymentProviderDataResponse]
+    id: str = Field(..., description="ID do pagamento")
+    status: str = Field(..., description="Status do pagamento")
+    qr_code: str = Field(..., description="QR Code do pagamento")
+    qr_code_base64: str = Field(..., description="QR Code em base64")
+    transaction_amount: float = Field(..., description="Valor da transação")
+    description: Optional[str] = Field(None, description="Descrição do pagamento")
+    payment_method_id: str = Field(..., description="ID do método de pagamento")
+    provider_data: Optional[PaymentProviderDataResponse] = Field(None, description="Dados do provedor de pagamento")
 
     class Config:
         orm_mode = True

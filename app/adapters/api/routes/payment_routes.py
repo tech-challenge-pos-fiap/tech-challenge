@@ -1,23 +1,26 @@
-from fastapi import APIRouter, Depends, HTTPException
-from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequestDTO, PixPaymentResponseDTO
-from app.application.services.create_payment_service import CreatePixPaymentService as PaymentService
-from app.config.use_cases.payment import get_payment_use_case as get_payment_service
+from fastapi import APIRouter, Depends
+from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequestDTO
+from app.adapters.external.mercado_pago.factory import get_payment_service
+from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
+from app.config.db import get_db
+from sqlalchemy.orm import Session
 
-router = APIRouter()
+router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
 
-@router.post("/payments/pix", response_model=PixPaymentResponseDTO)
+
+@router.post("/pix")
 async def create_pix_payment(
     payment_data: CreatePixPaymentRequestDTO,
-    payment_service: PaymentService = Depends(get_payment_service)
+    payment_service: MercadoPagoPaymentService = Depends(get_payment_service),
+    db: Session = Depends(get_db)
 ):
-    return await payment_service.create_payment(payment_data.dict())
+    return payment_service.create_pix_payment(payment_data.dict())
 
-@router.get("/payments/pix/{payment_id}", response_model=PixPaymentResponseDTO)
+
+@router.get("/{payment_id}")
 async def get_payment_status(
-    payment_id: int,
-    payment_service: PaymentService = Depends(get_payment_service)
+    payment_id: str,
+    payment_service: MercadoPagoPaymentService = Depends(get_payment_service),
+    db: Session = Depends(get_db)
 ):
-    try:
-        return await payment_service.get_payment_status(payment_id)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+    return payment_service.get_payment_status(payment_id)
