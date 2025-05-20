@@ -1,6 +1,6 @@
-from pydantic import Basemodel
+from pydantic import BaseModel
 
-class ProdutoDTO(Basemodel):
+class ProdutoDTO(BaseModel):
     nome: str
     descricao: str
     preco: float
