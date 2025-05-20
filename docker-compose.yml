@@ -15,8 +15,6 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    env_file:
-      - ./envs/postgres.env
 
   db:
     container_name: postgres
