@@ -1,5 +1,5 @@
-from config.db import SessionLocal
 from adapters.persistence.models.produto_model import ProdutoModel
+from config.db import SessionLocal
 
 produtos = [
     {"nome": "X-Burger", "descricao": "Hambúrguer com queijo", "preco": 18.0, "categoria": "lanche"},

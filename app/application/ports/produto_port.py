@@ -1,6 +1,8 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 from typing import List
+
 from app.domain.models.produto import Produto
+
 
 class ProdutoRepositoryPort(ABC):
     @abstractmethod

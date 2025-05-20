@@ -1,10 +1,12 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
+from app.adapters.api.dtos.produto_dto import ProdutoDTO
+from app.application.services.listar_produtos import ListarProdutosService
 from app.infra.db import get_db
 from app.persistence.repositories.produto_repository import ProdutoRepository
-from app.application.services.listar_produtos import ListarProdutosService
-from app.adapters.api.dtos.produto_dto import ProdutoDTO
-from typing import List
 
 router = APIRouter()
 

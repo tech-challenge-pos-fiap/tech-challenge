@@ -18,6 +18,7 @@ exclude = [
   "venv",
   ".venv",
   "migrations",
-  "tests"
+  "tests",
+  "app/alembic",
 ]
 lint.select = ["E", "F", "I", "B"]  # E: pycodestyle, F: pyflakes, I: isort, B: flake8-bugbear

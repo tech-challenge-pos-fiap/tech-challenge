@@ -1,6 +1,9 @@
 import enum
-from sqlalchemy import Column, Integer, String, Float, Enum
+
+from sqlalchemy import Column, Enum, Float, Integer, String
+
 from .base import TimestampMixin
+
 
 class ProductCategory(enum.Enum):
     burguers = 1

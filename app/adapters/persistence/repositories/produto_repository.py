@@ -1,7 +1,7 @@
-from sqlalchemy.orm import Session
-from app.persistence.models.produto import Produto
-from app.domain.models.produto import Produto
 from app.application.ports.produto_port import ProdutoRepositoryPort
+from app.domain.models.produto import Produto
+from app.persistence.models.produto import Produto
+
 
 class ProdutoRepository(ProdutoRepositoryPort):
     def __init__(self, db, Session):

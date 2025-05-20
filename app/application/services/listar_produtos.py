@@ -1,6 +1,8 @@
+from typing import List
+
 from app.application.ports.produto_port import ProdutoRepositoryPort
 from app.domain.models.produto import Produto
-from typing import List
+
 
 class ListarProdutosService:
     def __init__(self, produto_repo: ProdutoRepositoryPort):
