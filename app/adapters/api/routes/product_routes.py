@@ -11,7 +11,7 @@ from app.config.db import get_db
 router = APIRouter()
 
 
-@router.get("/produtos/categoria/{category}", response_model=List[ProductDTO])
+@router.get("/products/category/{category}", response_model=List[ProductDTO])
 def list_by_category(category: str, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     repo = ProductRepository(db)
     service = ListProductsService(repo)
