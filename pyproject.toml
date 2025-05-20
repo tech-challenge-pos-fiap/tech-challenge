@@ -18,10 +18,9 @@ exclude = [
   "venv",
   ".venv",
   "migrations",
-  "tests",
   "app/alembic",
 ]
-lint.select = ["E", "I", "B"]  # E: pycodestyle, I: isort, B: flake8-bugbear
+lint.select = ["E", "I", "B", "W"]  # E: pycodestyle, I: isort, B: flake8-bugbear
 
 [tool.ruff.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends", "fastapi.Query", "fastapi.params.Query"]
