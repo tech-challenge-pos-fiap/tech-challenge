@@ -19,10 +19,5 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Ruff
-        run: |
-          pip install ruff
-
       - name: Run Ruff
-        run: |
-          ruff check .
+        uses: astral-sh/ruff-action@v3

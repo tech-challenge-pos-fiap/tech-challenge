@@ -6,9 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "tech-challenge"
 version = "0.1.0"
 description = "FastAPI application for the Tech Challenge project"
-authors = [
-  { name = "Your Name", email = "your.email@example.com" }
-]
 readme = "README.md"
 requires-python = ">=3.11"
 
@@ -23,4 +20,4 @@ exclude = [
   "migrations",
   "tests"
 ]
-select = ["E", "F", "I", "B"]  # E: pycodestyle, F: pyflakes, I: isort, B: flake8-bugbear
+lint.select = ["E", "F", "I", "B"]  # E: pycodestyle, F: pyflakes, I: isort, B: flake8-bugbear
