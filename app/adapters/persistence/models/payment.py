@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, Numeric,Text, ForeignKey
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import relationship
+
 from .base import TimestampMixin
 
 
@@ -19,7 +20,7 @@ class PaymentProviderData(TimestampMixin):
     id = Column(Integer, primary_key=True)
     payment_id = Column(Integer, ForeignKey("payments.id"), nullable=False)
     provider_name = Column(String, nullable=False)  # ex: 'mercado_pago', 'stripe'
-    
+
     # Campos genéricos para gateways
     mp_payment_id = Column(String, nullable=True)
     mp_status = Column(String, nullable=True)

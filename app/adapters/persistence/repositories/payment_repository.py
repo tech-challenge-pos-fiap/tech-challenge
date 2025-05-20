@@ -1,5 +1,7 @@
-from typing import Optional, List
+from typing import List, Optional
+
 from sqlalchemy.orm import Session
+
 from app.adapters.persistence.models.payment import Payment, PaymentProviderData
 
 

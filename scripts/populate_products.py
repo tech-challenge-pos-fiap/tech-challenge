@@ -1,5 +1,5 @@
-from config.db import SessionLocal
-from adapters.persistence.models.produto_model import ProdutoModel
+from app.adapters.persistence.models.product import ProductModel
+from app.config.db import SessionLocal
 
 produtos = [
     {"nome": "X-Burger", "descricao": "Hambúrguer com queijo", "preco": 18.0, "categoria": "lanche"},
@@ -10,5 +10,5 @@ produtos = [
 
 db = SessionLocal()
 for p in produtos:
-    db.add(ProdutoModel(**p))
+    db.add(ProductModel(**p))
 db.commit()

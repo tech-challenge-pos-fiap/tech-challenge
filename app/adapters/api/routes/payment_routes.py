@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequestDTO
 from app.adapters.external.mercado_pago.factory import get_payment_service
 from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
 from app.config.db import get_db
-from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
 

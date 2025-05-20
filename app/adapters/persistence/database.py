@@ -1,6 +1,7 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
 import os
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://tech-challenge:tech-challenge@postgres:5432/tech-challenge")
 
@@ -13,4 +14,4 @@ def get_db() -> Session:
     try:
         yield db
     finally:
-        db.close() 
+        db.close()

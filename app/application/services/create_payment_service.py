@@ -1,5 +1,6 @@
+from typing import Any, Dict
+
 from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
-from typing import Dict, Any
 
 
 class CreatePixPaymentService:

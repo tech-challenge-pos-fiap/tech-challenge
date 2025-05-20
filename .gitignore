@@ -35,3 +35,6 @@ htmlcov/
 
 # OS-specific files
 .DS_Store
+
+# Linting
+.ruff_cache

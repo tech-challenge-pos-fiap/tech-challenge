@@ -1,10 +1,12 @@
-from app.application.ports.product_port import ProductRepositoryPort
-from app.domain.models.product import Product
 from typing import List
 
-class ListProductsService:
-    def __init__(self, product_repo: ProductRepositoryPort):
-        self.repo = product_repo
+from app.application.ports.product_repository_port import ProductRepositoryPort
+from app.domain.models.product import Product
 
-    def executar(self, category: str, skip: int = 0, limit: int = 10) -> List[Product]:
-        return self.repo.listar_por_categoria(category, skip, limit)
+
+class ListProductsService:
+    def __init__(self, product_repository: ProductRepositoryPort):
+        self.repository = product_repository
+
+    def execute(self, category: str, skip: int = 0, limit: int = 10) -> List[Product]:
+        return self.repository.list_by_category(category, skip, limit)
