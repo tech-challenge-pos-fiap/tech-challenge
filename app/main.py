@@ -1,6 +1,6 @@
 from typing import Union
 from fastapi import FastAPI
-from app.adapters.api.routes.produto_routes import router as produto_router
+from app.adapters.api.routes.product_routes import router as produto_router
 
 app = FastAPI()
 
