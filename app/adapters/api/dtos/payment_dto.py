@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field, EmailStr, constr
-from typing import Optional
 from decimal import Decimal
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field, constr
+
 
 class IdentificationDTO(BaseModel):
     type: Optional[str] = Field(None, description="Tipo de identificação (CPF, CNPJ)")
@@ -16,12 +18,12 @@ class PayerDTO(BaseModel):
 
 class CreatePixPaymentRequestDTO(BaseModel):
     transaction_amount: Decimal = Field(
-        ..., 
+        ...,
         gt=0,
         description="Valor da transação (deve ser maior que zero)"
     )
     description: Optional[str] = Field(
-        None, 
+        None,
         min_length=1,
         max_length=256,
         description="Descrição do pagamento"

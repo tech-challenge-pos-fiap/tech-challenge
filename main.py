@@ -1,6 +1,8 @@
 from typing import Union
-from app.adapters.api.routes.payment_routes import router as payment_routes
+
 from fastapi import FastAPI
+
+from app.adapters.api.routes.payment_routes import router as payment_routes
 
 app = FastAPI()
 
