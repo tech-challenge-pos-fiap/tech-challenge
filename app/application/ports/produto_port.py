@@ -1,8 +1,7 @@
-from abc import ABC, abstractclassmethod
-from typing import List
-from app.domain.models.produto import Produto
+# app/application/ports/produto_port.py
+from abc import ABC, abstractmethod
 
 class ProdutoRepositoryPort(ABC):
     @abstractmethod
-    def listar_por_categoria(self, categoria: str, skip: int = 0, limit: int = 10) -> List(Produto):
+    def listar_por_categoria(self, categoria: str, skip: int = 0, limit: int = 10):
         pass

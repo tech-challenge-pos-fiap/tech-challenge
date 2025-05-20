@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.persistence.models.produto import Produto
+from app.adapters.persistence.models.product import ProductModel
 from app.domain.models.produto import Produto
 from app.application.ports.produto_port import ProdutoRepositoryPort
 
