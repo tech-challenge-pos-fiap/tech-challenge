@@ -3,7 +3,7 @@ from app.adapters.persistence.models.product import ProductModel
 from app.domain.models.product import Product
 from app.application.ports.product_port import ProductRepositoryPort
 
-class ProductRepository(ProdutoRepositoryPort):
+class ProductRepository(ProductRepositoryPort):
     def __init__(self, db, Session):
         self.db = db
 
@@ -13,4 +13,4 @@ class ProductRepository(ProdutoRepositoryPort):
                             .offset(skip)\
                             .limit(limit)\
                             .all()
-        return [Product(p.name, p.description, p.price, p.category) for p in results] 
+        return [Product(p.name, p.description, p.price, p.category) for p in results]

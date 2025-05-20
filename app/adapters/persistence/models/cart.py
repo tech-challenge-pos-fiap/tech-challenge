@@ -1,12 +1,12 @@
 import enum
 from typing import List
-from sqlalchemy import Column, Integer, Table, Boolean
+from sqlalchemy import Column, Integer, Table, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from .base import TimestampMixin
 
 
 ProductCartModel = Table(
-    'product_order',
+    'product_cart',
     TimestampMixin.metadata,
     Column('product_id', ForeignKey('product.id'), primary_key=True),
     Column('cart_id', ForeignKey('cart.id'), primary_key=True),

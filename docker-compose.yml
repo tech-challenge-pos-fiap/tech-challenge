@@ -12,6 +12,7 @@ services:
       - ./scripts:/app/scripts
     env_file:
       - ./envs/app.env
+      - ./envs/postgres.env
     depends_on:
       - db
     restart: unless-stopped

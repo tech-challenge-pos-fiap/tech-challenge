@@ -21,6 +21,8 @@ if config.config_file_name is not None:
 from adapters.persistence.models.base import Base
 from adapters.persistence.models.payment import Payment, PaymentProviderData
 from adapters.persistence.models.product import ProductModel
+from adapters.persistence.models.cart import CartModel
+from adapters.persistence.models.order import OrderModel
 
 target_metadata = Base.metadata
 
@@ -63,6 +65,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    print(config.get_section(config.config_ini_section, {}))
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
