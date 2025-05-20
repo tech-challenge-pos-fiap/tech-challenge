@@ -14,8 +14,6 @@ services:
       - ./envs/app.env
     depends_on:
       - db
-    env_file:
-      - ./envs/postgres.env
     restart: unless-stopped
 
   db:
