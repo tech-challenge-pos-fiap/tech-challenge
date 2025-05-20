@@ -1,9 +1,10 @@
 from typing import Union
-
+from app.adapters.api.routes.payment_routes import router as payment_routes
 from fastapi import FastAPI
 
 app = FastAPI()
 
+app.include_router(payment_routes)
 
 @app.get("/")
 def read_root():

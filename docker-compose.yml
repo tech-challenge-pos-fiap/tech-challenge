@@ -8,8 +8,10 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./app:/app
+      - .:/app
       - ./scripts:/app/scripts
+    env_file:
+      - ./envs/app.env
     depends_on:
       - db
     env_file:

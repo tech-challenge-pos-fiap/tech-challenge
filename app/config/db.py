@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
-DATABASE_URL = f'postgresql://{os.environ.get("POSTGRES_USER")}:{os.environ.get("POSTGRES_PASSWORD")}@{os.environ.get("POSTGRES_HOST")}:{os.environ.get("POSTGRES_PORT")}/{os.environ.get("POSTGRES_DATABASE")}'
+DATABASE_URL = f'postgresql://{os.environ.get("POSTGRES_USER", "tech-challenge")}:{os.environ.get("POSTGRES_PASSWORD", "tech-challenge")}@{os.environ.get("POSTGRES_HOST", "postgres")}:{os.environ.get("POSTGRES_PORT", "5432")}/{os.environ.get("POSTGRES_DATABASE", "tech-challenge")}'
 
 engine = create_engine(DATABASE_URL)
 

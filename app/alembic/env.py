@@ -19,6 +19,9 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from adapters.persistence.models.base import Base
+from adapters.persistence.models.payment import Payment, PaymentProviderData
+from adapters.persistence.models.product import ProductModel
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
