@@ -23,7 +23,7 @@ class OrderModel(TimestampMixin):
     __tablename__ = 'order'
 
     id = Column(Integer, primary_key=True, index=True)
-    # client = Column(String, nullable=False) TODO - add client model
+    # client = Column(String, nullable=True) TODO - add client model
     products: Mapped[List["ProductModel"]] = relationship(
         "ProductModel",
         secondary=ProductOrderModel,

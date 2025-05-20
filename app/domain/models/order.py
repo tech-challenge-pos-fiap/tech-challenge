@@ -1,7 +1,20 @@
+from enum import Enum
+from dataclasses import dataclass
+from decimal import Decimal
+from typing import Optional
+
+
+class OrderStatus(str, Enum):
+    PENDING = 'pending'
+    DELIVERED = 'delivered'
+    CANCELED = 'canceled'
+
+
+@dataclass
 class Order:
-    def __init__(self, client, products, status, total_price, order_date):
-        self.client = client
-        self.products = products
-        self.status = status
-        self.total_price = total_price
-        self.order_date = order_date
+    id: Optional[int]
+    products: list
+    status: OrderStatus
+    total_price: Decimal
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
