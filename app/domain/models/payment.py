@@ -4,6 +4,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional
 
+
 class PaymentStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"
@@ -22,4 +23,4 @@ class Payment:
     status: PaymentStatus
     created_at: datetime
     updated_at: datetime
-    error_message: Optional[str] = None 
+    error_message: Optional[str] = None

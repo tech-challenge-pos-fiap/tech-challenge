@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field, EmailStr, constr
-from typing import Optional
 from decimal import Decimal
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field
+
 
 class IdentificationDTO(BaseModel):
     type: Optional[str] = Field(None, description="Tipo de identificação (CPF, CNPJ)")
@@ -10,18 +12,20 @@ class IdentificationDTO(BaseModel):
         description="Número do documento (somente CPF, com ou sem pontuação)"
     )
 
+
 class PayerDTO(BaseModel):
     email: Optional[EmailStr] = Field(None, description="Email do pagador")
     identification: Optional[IdentificationDTO] = Field(None, description="Identificação do pagador")
 
+
 class CreatePixPaymentRequestDTO(BaseModel):
     transaction_amount: Decimal = Field(
-        ..., 
+        ...,
         gt=0,
         description="Valor da transação (deve ser maior que zero)"
     )
     description: Optional[str] = Field(
-        None, 
+        None,
         min_length=1,
         max_length=256,
         description="Descrição do pagamento"
@@ -43,6 +47,7 @@ class CreatePixPaymentRequestDTO(BaseModel):
             }
         }
 
+
 class PixPaymentResponseDTO(BaseModel):
     id: str = Field(..., description="ID do pagamento")
     status: str = Field(..., description="Status do pagamento")
@@ -58,7 +63,10 @@ class PixPaymentResponseDTO(BaseModel):
             "example": {
                 "id": "123456789",
                 "status": "pending",
-                "qr_code": "00020101021226870014br.gov.bcb.pix2569api.mercadopago.com/pix/123456789520400005303986540510.005802BR5913Test Store6009Sao Paulo62070503***6304E2CA",
+                "qr_code": (
+                    "00020101021226870014br.gov.bcb.pix2569api.mercadopago.com/pix/"
+                    "123456789520400005303986540510.005802BR5913Test Store6009Sao Paulo62070503***6304E2CA"
+                ),
                 "qr_code_base64": "iVBORw0KGgoAAAANSUhEUgAA...",
                 "transaction_amount": 100.00,
                 "created_at": "2024-03-20T10:00:00Z",
@@ -75,6 +83,7 @@ class PixPaymentResponseDTO(BaseModel):
             }
         }
 
+
 class PaymentProviderDataResponse(BaseModel):
     provider_name: str
     mp_payment_id: Optional[str]
@@ -87,6 +96,7 @@ class PaymentProviderDataResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class PaymentResponse(BaseModel):
     id: str = Field(..., description="ID do pagamento")
