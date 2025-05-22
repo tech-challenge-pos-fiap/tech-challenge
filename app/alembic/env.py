@@ -1,7 +1,4 @@
 import os
-from adapters.persistence.models.customer import CustomerModel
-from adapters.persistence.models.product import ProductModel
-from adapters.persistence.models.payment import Payment, PaymentProviderData
 from adapters.persistence.models.base import Base
 from logging.config import fileConfig
 

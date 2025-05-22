@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from app.adapters.api.dtos.customer_dto import CustomerResponse, IdentifyByCPFRequest, SignUpRequest
 from app.application.services.identify_customer_service import IdentifyCustomerService
 from app.application.services.sign_up_customer_service import SignUpCustomerService
-from app.config.depencencies import get_identify_by_cpf_service, get_sign_up_service
+from app.config.dependencies import get_identify_by_cpf_service, get_sign_up_service
 
 router = APIRouter(prefix="/customers", tags=["Customers"])
 

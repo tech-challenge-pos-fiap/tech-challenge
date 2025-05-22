@@ -1,10 +1,9 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from app.adapters.persistence.models.base import TimestampMixin
 
 
-class CustomerModel(Base):
+class CustomerModel(TimestampMixin):
     __tablename__ = "customers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

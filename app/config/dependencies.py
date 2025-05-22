@@ -13,5 +13,5 @@ def get_sign_up_service(db: Session = Depends(get_db)) -> SignUpCustomerService:
 
 
 def get_identify_by_cpf_service(db: Session = Depends(get_db)) -> IdentifyCustomerService:
-    repo = CustomerRepository(db)
-    return IdentifyCustomerService(repo)
+    repository = CustomerRepository(db)
+    return IdentifyCustomerService(repository)
