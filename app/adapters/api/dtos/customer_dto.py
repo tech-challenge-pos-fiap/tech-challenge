@@ -1,5 +1,6 @@
+from typing import Annotated, Optional
+
 from pydantic import BaseModel, EmailStr, StringConstraints
-from typing import Optional, Annotated
 
 
 class SignUpRequest(BaseModel):
