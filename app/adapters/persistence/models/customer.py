@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from app.adapters.persistence.models.base import TimestampMixin
+from .base import TimestampMixin
 
 
 class CustomerModel(TimestampMixin):

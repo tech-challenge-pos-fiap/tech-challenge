@@ -30,7 +30,7 @@ class PaymentProviderData(TimestampMixin):
     ticket_url = Column(Text, nullable=True)
     date_of_expiration = Column(DateTime, nullable=True)
 
-    payment = relationship("Payment", back_populates="provider_data")
+    # payment = relationship("Payment", back_populates="provider_data")
 
 
 
