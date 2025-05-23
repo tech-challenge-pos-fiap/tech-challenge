@@ -23,6 +23,7 @@ if config.config_file_name is not None:
 from adapters.persistence.models.base import Base
 from adapters.persistence.models.payment import Payment, PaymentProviderData
 from adapters.persistence.models.product import ProductModel
+from adapters.persistence.models.customer import CustomerModel
 from adapters.persistence.models.order import OrderModel
 
 target_metadata = Base.metadata
