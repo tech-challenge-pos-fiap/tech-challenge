@@ -1,4 +1,5 @@
+from .customer import Customer
 from .payment import Payment, PaymentStatus
-from .produto import Produto
+from .product import Product
 
-__all__ = ['Payment', 'PaymentStatus', 'Produto']
+__all__ = ['Payment', 'PaymentStatus', 'Product', 'Customer']
