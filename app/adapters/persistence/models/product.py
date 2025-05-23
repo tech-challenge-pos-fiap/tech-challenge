@@ -1,6 +1,7 @@
 import enum
 
 from sqlalchemy import Column, Enum, Float, Integer, String
+from sqlalchemy.orm import relationship
 
 from .base import TimestampMixin
 
@@ -20,3 +21,8 @@ class ProductModel(TimestampMixin):
     description = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     category = Column(Enum(ProductCategory), nullable=False)
+    orders = relationship(
+        "OrderModel",
+        secondary='product_order',
+        back_populates="products",
+    )

@@ -2,7 +2,7 @@ import enum
 from typing import List
 from app.adapters.persistence.models.product import ProductModel
 from sqlalchemy import Column, Integer, Float, Enum, Table, ForeignKey
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.orm import relationship, Mapped
 from .base import TimestampMixin
 
 
@@ -25,7 +25,7 @@ class OrderModel(TimestampMixin):
     __tablename__ = 'order'
 
     id = Column(Integer, primary_key=True, index=True)
-    products: Mapped[List["ProductModel"]] = relationship(
+    products: Mapped[List[ProductModel]] = relationship(
         "ProductModel",
         secondary=ProductOrderModel,
         back_populates="orders",
