@@ -11,4 +11,4 @@ router = APIRouter()
 def create_order(order: OrderDTO, db: Session = Depends(get_db)):
     repo = OrderRepository(db)
     service = CreateOrderService(repo)
-    return service.execute(order)
+    return service.execute(order.dict())

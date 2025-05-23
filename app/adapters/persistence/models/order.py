@@ -1,5 +1,6 @@
 import enum
 from typing import List
+from app.adapters.persistence.models.product import ProductModel
 from sqlalchemy import Column, Integer, Float, Enum, Table, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from .base import TimestampMixin
@@ -10,6 +11,7 @@ ProductOrderModel = Table(
     TimestampMixin.metadata,
     Column('product_id', ForeignKey('product.id'), primary_key=True),
     Column('order_id', ForeignKey('order.id'), primary_key=True),
+    Column('quantity', Integer, nullable=False),
 )
 
 
@@ -23,7 +25,6 @@ class OrderModel(TimestampMixin):
     __tablename__ = 'order'
 
     id = Column(Integer, primary_key=True, index=True)
-    # client = Column(String, nullable=True) TODO - add client model
     products: Mapped[List["ProductModel"]] = relationship(
         "ProductModel",
         secondary=ProductOrderModel,
@@ -31,3 +32,4 @@ class OrderModel(TimestampMixin):
     )
     status = Column(Enum(OrderStatus), nullable=False)
     total_price = Column(Float, nullable=False)
+    # client = Column(String, nullable=True) TODO - add client model

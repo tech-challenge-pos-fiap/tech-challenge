@@ -10,6 +10,7 @@ class OrderRepository(OrderRepositoryPort):
 
     def create(self, order_data: dict) -> Order:
         """Create a new order."""
+        print(order_data, flush=True)
         order = OrderModel(**order_data)
         self.db.add(order)
         self.db.commit()
