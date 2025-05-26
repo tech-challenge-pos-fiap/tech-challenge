@@ -1,6 +1,7 @@
 from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
 from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
 from app.application.services.create_payment_service import CreatePixPaymentService
+from app.application.services.list_payment_service import ListPaymentService
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -49,3 +50,7 @@ def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymen
     client = MercadoPagoPixClient()
     adapter = MercadoPagoPaymentService(client, db)
     return CreatePixPaymentService(adapter)
+
+def get_list_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
+    repository = PaymentRepository(db)
+    return ListPaymentService(repository)

@@ -18,25 +18,8 @@ class PaymentRepository:
 
     def get_payment_by_id(self, payment_id: int) -> Optional[Payment]:
         """Busca um pagamento pelo ID"""
-        return self.db.query(Payment).filter(Payment.id == payment_id).first()
-
-    def get_payment_by_mp_id(self, mp_payment_id: str) -> Optional[Payment]:
-        """Busca um pagamento pelo ID do Mercado Pago"""
-        return self.db.query(Payment).filter(
-            Payment.mp_payment_id == mp_payment_id
-        ).first()
-
-    def update_status(self, payment_id: int, status: str, error_message: Optional[str] = None) -> Optional[Payment]:
-        """Atualiza o status de um pagamento"""
-        payment = self.get_payment_by_id(payment_id)
+        payment = self.db.query(Payment).filter(Payment.id == payment_id).first()
         if payment:
-            payment.status = status
-            if error_message and hasattr(payment, "error_message"):
-                payment.error_message = error_message
-            self.db.commit()
-            self.db.refresh(payment)
+            payment.status = PaymentStatus.APPROVED
+            payment.paid_at = datetime.now() 
         return payment
-
-    def list_by_status(self, status: str) -> List[Payment]:
-        """Lista pagamentos por status"""
-        return self.db.query(Payment).filter(Payment.status == status).all()

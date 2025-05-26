@@ -51,23 +51,3 @@ class MercadoPagoPaymentService(PaymentPort):
             "qr_code": transaction_data.get("qr_code", ""),
             "qr_code_base64": transaction_data.get("qr_code_base64", "")
         }
-
-    def get_payment_status(self, payment_id: str) -> Dict[str, Any]:
-        payment = self.repository.get_payment_by_id(int(payment_id))
-        if not payment:
-            raise ValueError(f"Payment {payment_id} not found")
-
-        return {
-            "id": str(payment.id),
-            "status": PaymentStatus.APPROVED,
-            "transaction_amount": float(payment.transaction_amount),
-            "description": payment.description,
-            "payment_method_id": payment.payment_method_id,
-            "created_at": payment.created_at.isoformat(),
-            "updated_at": payment.updated_at.isoformat(),
-            "payer": {
-                "email": payment.payer_email,
-                "first_name": payment.payer_first_name,
-                "last_name": payment.payer_last_name
-            }
-        }

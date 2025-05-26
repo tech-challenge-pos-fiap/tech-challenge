@@ -1,10 +1,11 @@
 from decimal import Decimal
 from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
 
-class IdentificationDTO(BaseModel):
+class Identification(BaseModel):
     type: Optional[str] = Field(None, description="Tipo de identificação (CPF, CNPJ)")
     number: Optional[str] = Field(
         None,
@@ -13,12 +14,12 @@ class IdentificationDTO(BaseModel):
     )
 
 
-class PayerDTO(BaseModel):
+class Payer(BaseModel):
     email: Optional[EmailStr] = Field(None, description="Email do pagador")
-    identification: Optional[IdentificationDTO] = Field(None, description="Identificação do pagador")
+    identification: Optional[Identification] = Field(None, description="Identificação do pagador")
 
 
-class CreatePixPaymentRequestDTO(BaseModel):
+class CreatePixPaymentRequest(BaseModel):
     transaction_amount: Decimal = Field(
         ...,
         gt=0,
@@ -30,7 +31,7 @@ class CreatePixPaymentRequestDTO(BaseModel):
         max_length=256,
         description="Descrição do pagamento"
     )
-    payer: Optional[PayerDTO] = Field(None, description="Informações do pagador")
+    payer: Optional[Payer] = Field(None, description="Informações do pagador")
 
     class Config:
         json_schema_extra = {
@@ -48,7 +49,7 @@ class CreatePixPaymentRequestDTO(BaseModel):
         }
 
 
-class PixPaymentResponseDTO(BaseModel):
+class PixPaymentResponse(BaseModel):
     id: int = Field(..., description="ID do pagamento")
     status: str = Field(..., description="Status do pagamento")
     qr_code: str = Field(..., description="Código QR do PIX")
@@ -56,7 +57,7 @@ class PixPaymentResponseDTO(BaseModel):
     transaction_amount: Decimal = Field(..., description="Valor da transação")
     created_at: str = Field(..., description="Data de criação do pagamento")
     updated_at: str = Field(..., description="Data da última atualização")
-    payer: PayerDTO = Field(..., description="Informações do pagador")
+    payer: Payer = Field(..., description="Informações do pagador")
 
     class Config:
         json_schema_extra = {
@@ -99,14 +100,12 @@ class PaymentProviderDataResponse(BaseModel):
 
 
 class PaymentResponse(BaseModel):
-    id: str = Field(..., description="ID do pagamento")
+    id: int = Field(..., description="ID do pagamento")
     status: str = Field(..., description="Status do pagamento")
-    qr_code: str = Field(..., description="QR Code do pagamento")
-    qr_code_base64: str = Field(..., description="QR Code em base64")
-    transaction_amount: float = Field(..., description="Valor da transação")
-    description: Optional[str] = Field(None, description="Descrição do pagamento")
-    payment_method_id: str = Field(..., description="ID do método de pagamento")
-    provider_data: Optional[PaymentProviderDataResponse] = Field(None, description="Dados do provedor de pagamento")
+    amount: float = Field(..., description="Valor da transação")
+    method: str = Field(..., description="ID do método de pagamento")
+    paid_at: Optional[datetime] = None
+
 
     class Config:
-        orm_mode = True
+        from_attributes = True 

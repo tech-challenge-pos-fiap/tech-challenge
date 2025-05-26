@@ -9,6 +9,6 @@ class PaymentPort(ABC):
         pass
 
     @abstractmethod
-    def get_payment_status(self, payment_id: str) -> Dict[str, Any]:
+    def get_payment(self, payment_id: str) -> Dict[str, Any]:
         """Obtém o status de um pagamento"""
         pass
