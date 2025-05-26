@@ -2,6 +2,8 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any, Dict
 
+from app.adapters.persistence.models.payment import Payment
+from app.domain.models.payment import PaymentMethod, PaymentStatus
 from sqlalchemy.orm import Session
 
 from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
@@ -15,45 +17,40 @@ class MercadoPagoPaymentService(PaymentPort):
         self.repository = PaymentRepository(db)
 
     def create_pix_payment(self, payment_data: Dict[str, Any]) -> Dict[str, Any]:
-        # Cria uma cópia do payment_data para não modificar o original
         payment_data = payment_data.copy()
-
-        # Adiciona payment_method_id como "pix" por padrão
         payment_data["payment_method_id"] = "pix"
-
-        # Converte Decimal para float para serialização JSON
         if isinstance(payment_data.get("transaction_amount"), Decimal):
             payment_data["transaction_amount"] = float(payment_data["transaction_amount"])
 
-        # Obtém a resposta do Mercado Pago
         mp_response = self.client.create_pix_payment(payment_data)
+        payment = Payment(
+            # order_id=payment_data["order_id"],
+            amount=Decimal(str(mp_response["transaction_amount"])),
+            method=PaymentMethod.PIX,
+            status=mp_response["status"],
+            paid_at=None,
+            mp_response=mp_response
+        )
+        saved_payment = self.repository.create_payment(payment)
 
-        # Extrai o QR code do point_of_interaction
-        point_of_interaction = mp_response.get("point_of_interaction", {})
-        transaction_data = point_of_interaction.get("transaction_data", {})
-        qr_code = transaction_data.get("qr_code", "")
-        qr_code_base64 = transaction_data.get("qr_code_base64", "")
+        transaction_data = mp_response.get("point_of_interaction", {}).get("transaction_data", {})
 
-        # Adiciona os campos obrigatórios
-        now = datetime.now(UTC).isoformat()
-        response = {
-            "id": mp_response["id"],
-            "status": mp_response["status"],
-            "transaction_amount": mp_response["transaction_amount"],
+        return {
+            "id": saved_payment.id,
+            "status": saved_payment.status,
+            "transaction_amount": float(saved_payment.amount),
             "description": payment_data.get("description", ""),
-            "payment_method_id": "pix",  # Garante que sempre será "pix"
-            "created_at": now,
-            "updated_at": now,
+            "payment_method_id": "pix",
+            "created_at": saved_payment.created_at.isoformat(),
+            "updated_at": saved_payment.updated_at.isoformat(),
             "payer": {
                 "email": payment_data.get("payer", {}).get("email", ""),
                 "first_name": payment_data.get("payer", {}).get("first_name", ""),
                 "last_name": payment_data.get("payer", {}).get("last_name", "")
             },
-            "qr_code": qr_code,
-            "qr_code_base64": qr_code_base64
+            "qr_code": transaction_data.get("qr_code", ""),
+            "qr_code_base64": transaction_data.get("qr_code_base64", "")
         }
-
-        return response
 
     def get_payment_status(self, payment_id: str) -> Dict[str, Any]:
         payment = self.repository.get_payment_by_id(int(payment_id))
@@ -62,7 +59,7 @@ class MercadoPagoPaymentService(PaymentPort):
 
         return {
             "id": str(payment.id),
-            "status": payment.status,
+            "status": PaymentStatus.APPROVED,
             "transaction_amount": float(payment.transaction_amount),
             "description": payment.description,
             "payment_method_id": payment.payment_method_id,

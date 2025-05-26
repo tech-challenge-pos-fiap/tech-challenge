@@ -1,8 +1,12 @@
+from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
+from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
+from app.application.services.create_payment_service import CreatePixPaymentService
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.adapters.persistence.repositories.customer_repository import CustomerRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
+from app.adapters.persistence.repositories.payment_repository import PaymentRepository
 from app.application.services.create_products_service import CreateProductsService
 from app.application.services.delete_products import DeleteProductsService
 from app.application.services.identify_customer_service import IdentifyCustomerService
@@ -40,3 +44,8 @@ def get_update_products_service(db: Session = Depends(get_db)) -> UpdateProducts
 def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProductsService:
     repository = ProductRepository(db)
     return DeleteProductsService(repository)
+
+def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymentService:
+    client = MercadoPagoPixClient()
+    adapter = MercadoPagoPaymentService(client, db)
+    return CreatePixPaymentService(adapter)

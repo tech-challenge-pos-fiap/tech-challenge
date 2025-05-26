@@ -49,7 +49,7 @@ class CreatePixPaymentRequestDTO(BaseModel):
 
 
 class PixPaymentResponseDTO(BaseModel):
-    id: str = Field(..., description="ID do pagamento")
+    id: int = Field(..., description="ID do pagamento")
     status: str = Field(..., description="Status do pagamento")
     qr_code: str = Field(..., description="Código QR do PIX")
     qr_code_base64: str = Field(..., description="Código QR em base64")
@@ -61,7 +61,7 @@ class PixPaymentResponseDTO(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "id": "123456789",
+                "id": "1",
                 "status": "pending",
                 "qr_code": (
                     "00020101021226870014br.gov.bcb.pix2569api.mercadopago.com/pix/"

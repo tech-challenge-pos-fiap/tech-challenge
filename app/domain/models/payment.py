@@ -14,6 +14,13 @@ class PaymentStatus(str, Enum):
     IN_PROCESS = "in_process"
     ERROR = "error"
 
+
+class PaymentMethod(str, Enum):
+    PIX = "pix"
+    CREDIT_CARD = "credit_card"
+    BOLETO = "boleto"
+
+
 @dataclass
 class Payment:
     id: Optional[int]
