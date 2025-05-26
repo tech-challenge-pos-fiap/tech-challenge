@@ -2,18 +2,18 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.adapters.persistence.repositories.customer_repository import CustomerRepository
+from app.adapters.persistence.repositories.order_repository import OrderRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
 from app.application.services.create_products_service import CreateProductsService
 from app.application.services.delete_products import DeleteProductsService
 from app.application.services.identify_customer_service import IdentifyCustomerService
 from app.application.services.list_products_service import ListProductsService
-from app.application.services.sign_up_customer_service import SignUpCustomerService
-from app.application.services.update_products_service import UpdateProductsService
-from app.adapters.persistence.repositories.order_repository import OrderRepository
 from app.application.services.orders.create_order_service import CreateOrderService
 from app.application.services.orders.get_all_order_service import GetAllOrderService
 from app.application.services.orders.get_order_service import GetOrderService
 from app.application.services.orders.update_order_service import UpdateOrderService
+from app.application.services.sign_up_customer_service import SignUpCustomerService
+from app.application.services.update_products_service import UpdateProductsService
 from app.config.db import get_db
 
 

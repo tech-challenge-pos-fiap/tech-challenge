@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 
 from app.adapters.api.dtos.order_dto import WriteOrderDTO
-from app.adapters.persistence.repositories.order_repository import OrderRepository
 from app.application.services.orders.create_order_service import CreateOrderService
 from app.application.services.orders.get_all_order_service import GetAllOrderService
 from app.application.services.orders.get_order_service import GetOrderService
@@ -11,9 +9,8 @@ from app.config.dependencies import (
     get_create_order_service,
     get_get_all_order_service,
     get_get_order_service,
-    get_update_order_service
+    get_update_order_service,
 )
-from app.config.db import get_db
 
 router = APIRouter(prefix="/api/v1/orders", tags=["orders"])
 @router.post("/")
