@@ -1,15 +1,15 @@
 """create product table
 
 Revision ID: eb50a47a8be2
-Revises: 
+Revises:
 Create Date: 2025-05-17 21:13:19.684992
 
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = 'eb50a47a8be2'
@@ -26,7 +26,9 @@ def upgrade() -> None:
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
     sa.Column('price', sa.Float(), nullable=False),
-    sa.Column('category', sa.Enum('burguers', 'drinks', 'appetizers', 'desserts', name='productcategory'), nullable=False),
+    sa.Column('category', sa.Enum(
+        'burguers', 'drinks', 'appetizers', 'desserts', name='productcategory'), nullable=False
+    ),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
