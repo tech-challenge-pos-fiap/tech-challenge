@@ -15,6 +15,7 @@ class OrderStatus(str, Enum):
 class Order:
     id: Optional[int]
     products: list
+    customer_id: Optional[int]
     status: OrderStatus
     total_price: Decimal
     created_at: Optional[datetime]

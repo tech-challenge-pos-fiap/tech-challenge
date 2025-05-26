@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.persistence.models.order import OrderModel, OrderStatus
+from app.adapters.persistence.models.order import OrderModel, OrderStatus, ProductOrderModel
 from app.adapters.persistence.models.product import ProductModel
 from app.application.ports.order_repository_port import OrderRepositoryPort
 from app.domain.models.order import Order
@@ -35,19 +35,51 @@ class OrderRepository(OrderRepositoryPort):
         self.db.commit()
         self.db.refresh(order)
 
-        return Order(order.id, order.customer_id, order.total_price, order.status, order.created_at, order.updated_at)
+        for product_data in products:
+            product_id = product_data.get("product_id")
+            quantity = product_data.get("quantity")
+
+            product_model = self.db.query(ProductModel).filter(ProductModel.id == product_id).first()
+            if product_model:
+                stmt = ProductOrderModel.insert().values(
+                    product_id=product_id,
+                    order_id=order.id,
+                    quantity=quantity,
+                )
+                self.db.execute(stmt)
+
+            self.db.commit()
+
+        return Order(
+            id=order.id,
+            customer_id=order.customer_id or None,
+            products=[
+                {
+                    "product_id": product.id,
+                } for product in order.products
+            ],
+            total_price=float(order.total_price),
+            status=order.status.value,
+            created_at=order.created_at.isoformat(),
+            updated_at=order.updated_at.isoformat()
+        )
 
     def get(self, order_id: int) -> Order:
         """Get an order by ID."""
         order = self.db.query(OrderModel).filter(OrderModel.id == order_id).first()
         if order:
             return Order(
-                order.id,
-                order.customer_id,
-                order.total_price,
-                order.status,
-                order.created_at,
-                order.updated_at
+                id=order.id,
+                products=[
+                    {
+                        "product": product.__dict__,
+                    } for product in order.products
+                ],
+                customer_id=order.customer_id,
+                status=order.status,
+                total_price=order.total_price,
+                created_at=order.created_at.isoformat(),
+                updated_at=order.updated_at.isoformat(),
             )
         return None
 
@@ -60,12 +92,17 @@ class OrderRepository(OrderRepositoryPort):
             self.db.commit()
             self.db.refresh(order)
             return Order(
-                order.id,
-                order.customer_id,
-                order.total_price,
-                order.status,
-                order.created_at,
-                order.updated_at
+                id=order.id,
+                products=[
+                    {
+                        "product": product.__dict__,
+                    } for product in order.products
+                ],
+                customer_id=order.customer_id,
+                status=order.status,
+                total_price=order.total_price,
+                created_at=order.created_at.isoformat(),
+                updated_at=order.updated_at.isoformat(),
             )
         return None
 
@@ -74,12 +111,16 @@ class OrderRepository(OrderRepositoryPort):
         results = self.db.query(OrderModel).offset(skip).limit(limit).all()
         return [
             Order(
-                order.id,
-                order.products if order.products else [],
-                order.status,
-                order.total_price,
-                order.customer_id,
-                order.created_at,
-                order.updated_at,
+                id=order.id,
+                products=[
+                    {
+                        "product": product.__dict__,
+                    } for product in order.products
+                ],
+                customer_id=order.customer_id,
+                status=order.status,
+                total_price=order.total_price,
+                created_at=order.created_at.isoformat(),
+                updated_at=order.updated_at.isoformat(),
             ) for order in results
         ]

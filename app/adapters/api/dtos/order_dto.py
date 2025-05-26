@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 class OrderDTO(BaseModel):
     id: Optional[int] = Field(None, description="ID do pedido")
     products: list = Field(..., description="Lista de produtos no pedido")
-    status: str = Field(..., description="Status do pedido")
+    status: Optional[str] = Field(None, description="Status do pedido")
     total_price: Optional[Decimal] = Field(None, description="Preço total do pedido")
     customer_id: Optional[int] = Field(None, description="ID do cliente associado ao pedido")
     created_at: Optional[str] = Field(None, description="Data de criação do pedido")
