@@ -9,6 +9,11 @@ from app.application.services.identify_customer_service import IdentifyCustomerS
 from app.application.services.list_products_service import ListProductsService
 from app.application.services.sign_up_customer_service import SignUpCustomerService
 from app.application.services.update_products_service import UpdateProductsService
+from app.adapters.persistence.repositories.order_repository import OrderRepository
+from app.application.services.orders.create_order_service import CreateOrderService
+from app.application.services.orders.get_all_order_service import GetAllOrderService
+from app.application.services.orders.get_order_service import GetOrderService
+from app.application.services.orders.update_order_service import UpdateOrderService
 from app.config.db import get_db
 
 
@@ -40,3 +45,19 @@ def get_update_products_service(db: Session = Depends(get_db)) -> UpdateProducts
 def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProductsService:
     repository = ProductRepository(db)
     return DeleteProductsService(repository)
+
+def get_create_order_service(db: Session = Depends(get_db)) -> CreateOrderService:
+    repository = OrderRepository(db)
+    return CreateOrderService(repository)
+
+def get_get_all_order_service(db: Session = Depends(get_db)) -> GetAllOrderService:
+    repository = OrderRepository(db)
+    return GetAllOrderService(repository)
+
+def get_get_order_service(db: Session = Depends(get_db)) -> GetOrderService:
+    repository = OrderRepository(db)
+    return GetOrderService(repository)
+
+def get_update_order_service(db: Session = Depends(get_db)) -> UpdateOrderService:
+    repository = OrderRepository(db)
+    return UpdateOrderService(repository)
