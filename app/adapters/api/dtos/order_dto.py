@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from app.adapters.api.dtos.product_dto import ProductResponse
+
 
 class ProductOrderDTO(BaseModel):
     product_id: int

@@ -10,7 +10,7 @@ from app.application.services.orders.update_order_service import UpdateOrderServ
 from app.config.db import get_db
 
 router = APIRouter(prefix="/api/v1/orders", tags=["orders"])
-@router.post("/", response_model=OrderDTO)
+@router.post("/")
 def create_order(order: WriteOrderDTO, db: Session = Depends(get_db)):
     repo = OrderRepository(db)
     service = CreateOrderService(repo)
