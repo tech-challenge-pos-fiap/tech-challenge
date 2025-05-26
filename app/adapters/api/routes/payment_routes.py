@@ -1,10 +1,10 @@
-from app.application.services.list_payment_service import ListPaymentService
 from fastapi import APIRouter, Depends
 
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
-from app.config.dependencies import get_create_payment_service, get_list_payment_service
 from app.application.services.create_payment_service import CreatePixPaymentService
+from app.application.services.list_payment_service import ListPaymentService
 from app.config.db import get_db
+from app.config.dependencies import get_create_payment_service, get_list_payment_service
 
 router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
 

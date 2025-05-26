@@ -1,9 +1,10 @@
-from typing import List, Optional
+from datetime import datetime
+from typing import Optional
 
-from app.domain.models.payment import PaymentMethod, PaymentStatus
 from sqlalchemy.orm import Session
-from datetime import datetime, timezone
+
 from app.adapters.persistence.models.payment import Payment
+from app.domain.models.payment import PaymentStatus
 
 
 class PaymentRepository:
@@ -21,5 +22,5 @@ class PaymentRepository:
         payment = self.db.query(Payment).filter(Payment.id == payment_id).first()
         if payment:
             payment.status = PaymentStatus.APPROVED
-            payment.paid_at = datetime.now() 
+            payment.paid_at = datetime.now()
         return payment

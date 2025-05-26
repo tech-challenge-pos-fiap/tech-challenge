@@ -29,7 +29,7 @@ def upgrade() -> None:
     # Criar os tipos no banco
     payment_method.create(op.get_bind())
     payment_status.create(op.get_bind())
-    
+
     # Agora podemos fazer as alterações na tabela
     op.drop_table('payment_provider_data')
     op.add_column('payments', sa.Column('method', payment_method, nullable=False))

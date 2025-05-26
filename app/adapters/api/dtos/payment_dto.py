@@ -1,6 +1,6 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
-from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -108,4 +108,4 @@ class PaymentResponse(BaseModel):
 
 
     class Config:
-        from_attributes = True 
+        from_attributes = True
