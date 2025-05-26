@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.persistence.models.order import OrderModel, OrderStatus, ProductOrderModel
+from app.adapters.persistence.models.order import OrderModel, OrderStatus
 from app.adapters.persistence.models.product import ProductModel
 from app.application.ports.order_repository_port import OrderRepositoryPort
 from app.domain.models.order import Order
+
 
 class OrderRepository(OrderRepositoryPort):
     def __init__(self, db: Session):
@@ -34,30 +35,20 @@ class OrderRepository(OrderRepositoryPort):
         self.db.commit()
         self.db.refresh(order)
 
-        products_data = [
-            {
-                'product_id': product.get("product_id"),
-                'quantity': product.get("quantity"),
-            } for product in products
-        ] if products else []
-
-        for product in products_data:
-            stmt = insert(ProductOrderModel).values(
-                order_id=order.id,
-                product_id=product_data['product_id'],
-                quantity=product_data['quantity']
-            )
-            db.session.execute(stmt)
-
-        self.db.commit()
-        self.db.refresh(order)
         return Order(order.id, order.customer_id, order.total_price, order.status, order.created_at, order.updated_at)
 
     def get(self, order_id: int) -> Order:
         """Get an order by ID."""
         order = self.db.query(OrderModel).filter(OrderModel.id == order_id).first()
         if order:
-            return Order(order.id, order.customer_id, order.total_price, order.status, order.created_at, order.updated_at)
+            return Order(
+                order.id,
+                order.customer_id,
+                order.total_price,
+                order.status,
+                order.created_at,
+                order.updated_at
+            )
         return None
 
     def update(self, order_id: int, order_data: dict) -> Order:
@@ -68,7 +59,14 @@ class OrderRepository(OrderRepositoryPort):
                 setattr(order, key, value)
             self.db.commit()
             self.db.refresh(order)
-            return Order(order.id, order.customer_id, order.total_price, order.status, order.created_at, order.updated_at)
+            return Order(
+                order.id,
+                order.customer_id,
+                order.total_price,
+                order.status,
+                order.created_at,
+                order.updated_at
+            )
         return None
 
     def get_all(self, skip: int = 0, limit: int = 10) -> list[Order]:

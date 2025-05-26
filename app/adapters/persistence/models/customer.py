@@ -1,7 +1,10 @@
 from typing import List
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Mapped, relationship
+
 from .base import TimestampMixin
+
 
 class CustomerModel(TimestampMixin):
     __tablename__ = "customers"
