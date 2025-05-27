@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from .product_dto import Product
+
 
 class ProductOrderDTO(BaseModel):
     product_id: int
@@ -10,7 +12,7 @@ class ProductOrderDTO(BaseModel):
 
 class OrderDTO(BaseModel):
     id: Optional[int] = Field(None, description="ID do pedido")
-    products: list = Field(..., description="Lista de produtos no pedido")
+    products: list[Product] = Field(..., description="Lista de produtos no pedido")
     status: Optional[str] = Field(None, description="Status do pedido")
     total_price: Optional[Decimal] = Field(None, description="Preço total do pedido")
     customer_id: Optional[int] = Field(None, description="ID do cliente associado ao pedido")

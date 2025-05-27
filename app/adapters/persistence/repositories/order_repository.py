@@ -15,7 +15,10 @@ class OrderRepository(OrderRepositoryPort):
             id=model.id,
             products=[
                 {
-                    "product": product.__dict__,
+                    "name": product.name,
+                    "description": product.description,
+                    "price": product.price,
+                    "category": product.category,
                 } for product in model.products
             ],
             customer_id=model.customer_id,
