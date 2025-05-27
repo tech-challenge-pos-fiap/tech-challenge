@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
-from sqlalchemy.exc import NoResultFound
 
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from app.adapters.persistence.models.payment import Payment

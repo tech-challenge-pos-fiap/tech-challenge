@@ -1,10 +1,12 @@
-from unittest.mock import MagicMock, patch
-import pytest
 from decimal import Decimal
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.list_payment_service import ListPaymentService
 from app.domain.models.payment import PaymentMethod, PaymentStatus
+
 
 class MockPaymentPort:
     def create_pix_payment(self, payment_data):
@@ -63,7 +65,7 @@ def test_create_pix_payment_service_with_invalid_data():
     payment_data = {
         "payment_method_id": "pix"
     }
-    with pytest.raises(Exception):
+    with pytest.raises(Exception) as exc_info:
         service.execute(payment_data)
 
 def test_create_pix_payment_service_with_mp_error():
@@ -82,4 +84,4 @@ def test_create_pix_payment_service_with_mp_error():
     }
     with pytest.raises(Exception) as exc_info:
         service.execute(payment_data)
-    assert str(exc_info.value) == "MP API Error" 
+    assert str(exc_info.value) == "MP API Error"

@@ -1,6 +1,5 @@
+from fastapi import APIRouter, Depends, HTTPException
 from requests.exceptions import HTTPError, RequestException
-from fastapi import HTTPException
-from fastapi import APIRouter, Depends
 from sqlalchemy.exc import NoResultFound
 
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
@@ -23,13 +22,13 @@ def create_pix_payment(
     except HTTPError as e:
         status_code = e.response.status_code if e.response else 502
         detail = e.response.json() if e.response else str(e)
-        raise HTTPException(status_code=status_code, detail=detail)
+        raise HTTPException(status_code=status_code, detail=detail) from e
 
     except RequestException as e:
-        raise HTTPException(status_code=503, detail="Erro de comunicação com o Mercado Pago")
+        raise HTTPException(status_code=503, detail="Erro de comunicação com o Mercado Pago") from e
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Erro interno no servidor")
+        raise HTTPException(status_code=500, detail="Erro interno no servidor") from e
 
 @router.get("/{payment_id}", response_model=PaymentResponse)
 def get_payment(
@@ -40,6 +39,6 @@ def get_payment(
         payment = service.execute(payment_id)
         return PaymentResponse.from_orm(payment)
     except NoResultFound as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro interno no servidor - {e}")
+        raise HTTPException(status_code=500, detail=f"Erro interno no servidor - {e}") from e

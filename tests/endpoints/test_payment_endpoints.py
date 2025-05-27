@@ -1,9 +1,11 @@
-from unittest.mock import patch, MagicMock
-from fastapi.testclient import TestClient
 from decimal import Decimal
-from requests.models import Response
+from unittest.mock import MagicMock, patch
+
 import pytest
+from fastapi.testclient import TestClient
 from requests.exceptions import HTTPError
+from requests.models import Response
+
 
 def test_create_pix_payment_success(client: TestClient):
     payload = {
@@ -31,7 +33,7 @@ def test_create_pix_payment_success(client: TestClient):
 
     with patch('app.adapters.external.mercado_pago.pix.MercadoPagoPixClient.create_pix_payment') as mock_create:
         mock_create.return_value = mock_mp_response
-        
+
         response = client.post('/api/v1/payments/pix', json=payload)
         data = response.json()
         assert response.status_code == 200
@@ -121,4 +123,4 @@ def test_get_payment_by_id_success(client: TestClient):
 
 def test_get_payment_by_id_not_found(client: TestClient):
     response = client.get('/api/v1/payments/999999')
-    assert response.status_code == 404 
+    assert response.status_code == 404
