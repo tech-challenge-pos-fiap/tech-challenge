@@ -54,10 +54,10 @@ class PixPaymentResponse(BaseModel):
     status: str = Field(..., description="Status do pagamento")
     qr_code: str = Field(..., description="Código QR do PIX")
     qr_code_base64: str = Field(..., description="Código QR em base64")
-    transaction_amount: Decimal = Field(..., description="Valor da transação")
+    transaction_amount: float = Field(..., description="Valor da transação")
     created_at: str = Field(..., description="Data de criação do pagamento")
     updated_at: str = Field(..., description="Data da última atualização")
-    payer: Payer = Field(..., description="Informações do pagador")
+    payer: Optional[Payer]= Field(..., description="Informações do pagador")
 
     class Config:
         json_schema_extra = {

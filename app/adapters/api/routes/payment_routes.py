@@ -1,4 +1,7 @@
+from requests.exceptions import HTTPError, RequestException
+from fastapi import HTTPException
 from fastapi import APIRouter, Depends
+from sqlalchemy.exc import NoResultFound
 
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
 from app.application.services.create_payment_service import CreatePixPaymentService
@@ -8,20 +11,35 @@ from app.config.dependencies import get_create_payment_service, get_list_payment
 
 router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
 
-
 @router.post("/pix", response_model=PixPaymentResponse)
 def create_pix_payment(
     payment_data: CreatePixPaymentRequest,
     service: CreatePixPaymentService = Depends(get_create_payment_service),
 ):
-    result = service.execute(payment_data.dict())
-    return PixPaymentResponse(**result)
+    try:
+        result = service.execute(payment_data.dict())
+        return PixPaymentResponse(**result)
 
+    except HTTPError as e:
+        status_code = e.response.status_code if e.response else 502
+        detail = e.response.json() if e.response else str(e)
+        raise HTTPException(status_code=status_code, detail=detail)
+
+    except RequestException as e:
+        raise HTTPException(status_code=503, detail="Erro de comunicação com o Mercado Pago")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Erro interno no servidor")
 
 @router.get("/{payment_id}", response_model=PaymentResponse)
 def get_payment(
     payment_id: str,
     service: ListPaymentService = Depends(get_list_payment_service),
 ):
-    result = service.execute(payment_id)
-    return PaymentResponse.from_orm(result)
+    try:
+        payment = service.execute(payment_id)
+        return PaymentResponse.from_orm(payment)
+    except NoResultFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro interno no servidor - {e}")

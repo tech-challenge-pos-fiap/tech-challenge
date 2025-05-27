@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from sqlalchemy.exc import NoResultFound
 
 from sqlalchemy.orm import Session
 
@@ -20,7 +21,8 @@ class PaymentRepository:
     def get_payment_by_id(self, payment_id: int) -> Optional[Payment]:
         """Busca um pagamento pelo ID"""
         payment = self.db.query(Payment).filter(Payment.id == payment_id).first()
-        if payment:
-            payment.status = PaymentStatus.APPROVED
-            payment.paid_at = datetime.now()
+        if not payment:
+            raise NoResultFound("Pagamento não encontrado.")
+        payment.status = PaymentStatus.APPROVED
+        payment.paid_at = datetime.now()
         return payment

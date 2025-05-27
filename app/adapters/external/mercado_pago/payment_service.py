@@ -34,7 +34,7 @@ class MercadoPagoPaymentService(PaymentPort):
         saved_payment = self.repository.create_payment(payment)
 
         transaction_data = mp_response.get("point_of_interaction", {}).get("transaction_data", {})
-
+        payer_data = payment_data.get("payer") or {}
         return {
             "id": saved_payment.id,
             "status": saved_payment.status,
@@ -44,10 +44,10 @@ class MercadoPagoPaymentService(PaymentPort):
             "created_at": saved_payment.created_at.isoformat(),
             "updated_at": saved_payment.updated_at.isoformat(),
             "payer": {
-                "email": payment_data.get("payer", {}).get("email", ""),
-                "first_name": payment_data.get("payer", {}).get("first_name", ""),
-                "last_name": payment_data.get("payer", {}).get("last_name", "")
-            },
+                "email": payer_data.get("email"),
+                "first_name": payer_data.get("first_name"),
+                "last_name": payer_data.get("last_name"),
+            } if payer_data else None,
             "qr_code": transaction_data.get("qr_code", ""),
             "qr_code_base64": transaction_data.get("qr_code_base64", "")
         }
