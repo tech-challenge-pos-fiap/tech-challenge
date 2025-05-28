@@ -1,6 +1,7 @@
 import enum
 
 from sqlalchemy import Column, Enum, Float, Integer, String
+from sqlalchemy.orm import relationship
 
 from .base import TimestampMixin
 
@@ -19,5 +20,10 @@ class ProductModel(TimestampMixin):
     name = Column(String(100), nullable=False)
     description = Column(String, nullable=False)
     price = Column(Float, nullable=False)
+    orders = relationship(
+        "OrderModel",
+        secondary='product_order',
+        back_populates="products",
+    )
     category = Column(Enum(ProductCategory, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
     image_path = Column(String(255), nullable=True)

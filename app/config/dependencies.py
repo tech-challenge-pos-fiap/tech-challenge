@@ -5,6 +5,7 @@ from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymen
 from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
 from app.adapters.persistence.repositories.customer_repository import CustomerRepository
 from app.adapters.persistence.repositories.payment_repository import PaymentRepository
+from app.adapters.persistence.repositories.order_repository import OrderRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
 from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.create_products_service import CreateProductsService
@@ -12,6 +13,10 @@ from app.application.services.delete_products import DeleteProductsService
 from app.application.services.identify_customer_service import IdentifyCustomerService
 from app.application.services.list_payment_service import ListPaymentService
 from app.application.services.list_products_service import ListProductsService
+from app.application.services.orders.create_order_service import CreateOrderService
+from app.application.services.orders.get_all_order_service import GetAllOrderService
+from app.application.services.orders.get_order_service import GetOrderService
+from app.application.services.orders.update_order_service import UpdateOrderService
 from app.application.services.sign_up_customer_service import SignUpCustomerService
 from app.application.services.update_products_service import UpdateProductsService
 from app.config.db import get_db
@@ -54,3 +59,18 @@ def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymen
 def get_list_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
     repository = PaymentRepository(db)
     return ListPaymentService(repository)
+def get_create_order_service(db: Session = Depends(get_db)) -> CreateOrderService:
+    repository = OrderRepository(db)
+    return CreateOrderService(repository)
+
+def get_get_all_order_service(db: Session = Depends(get_db)) -> GetAllOrderService:
+    repository = OrderRepository(db)
+    return GetAllOrderService(repository)
+
+def get_get_order_service(db: Session = Depends(get_db)) -> GetOrderService:
+    repository = OrderRepository(db)
+    return GetOrderService(repository)
+
+def get_update_order_service(db: Session = Depends(get_db)) -> UpdateOrderService:
+    repository = OrderRepository(db)
+    return UpdateOrderService(repository)
