@@ -1,12 +1,19 @@
-import os
-import sys
-from app.adapters.persistence.models.base import Base
-from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
+from adapters.persistence.models.order import OrderModel
+from adapters.persistence.models.customer import CustomerModel
+from adapters.persistence.models.product import ProductModel
+from adapters.persistence.models.payment import Payment, PaymentProviderData
 from alembic import context
+from sqlalchemy import pool
+from sqlalchemy import engine_from_config
+from logging.config import fileConfig
+from adapters.persistence.models.base import Base
+from app.adapters.persistence.models.base import Base
+import sys
+import os
+<< << << < HEAD: alembic/env.py
+== == == =
+>>>>>> > eec3407af3a80287e66c831e9725919e07b67ff8: app/alembic/env.py
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
