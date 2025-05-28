@@ -1,11 +1,18 @@
+from app.adapters.persistence.models.order import OrderModel
+from app.adapters.persistence.models.customer import CustomerModel
+from app.adapters.persistence.models.product import ProductModel
+from app.adapters.persistence.models.payment import Payment, PaymentProviderData
+from app.adapters.persistence.models.base import Base
 import os
-from adapters.persistence.models.base import Base
+import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,11 +27,6 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from adapters.persistence.models.base import Base
-from adapters.persistence.models.payment import Payment, PaymentProviderData
-from adapters.persistence.models.product import ProductModel
-from adapters.persistence.models.customer import CustomerModel
-from adapters.persistence.models.order import OrderModel
 
 target_metadata = Base.metadata
 
@@ -33,7 +35,8 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 config.set_main_option(
-    'sqlalchemy.url', f'postgresql://{os.environ.get("POSTGRES_USER")}:{os.environ.get("POSTGRES_PASSWORD")}@{os.environ.get("POSTGRES_HOST")}:{os.environ.get("POSTGRES_PORT")}/{os.environ.get("POSTGRES_DATABASE")}')
+    'sqlalchemy.url', os.getenv('DATABASE_URL')
+)
 
 
 def run_migrations_offline() -> None:
