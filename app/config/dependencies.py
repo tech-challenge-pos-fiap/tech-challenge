@@ -1,12 +1,17 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
+from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
 from app.adapters.persistence.repositories.customer_repository import CustomerRepository
 from app.adapters.persistence.repositories.order_repository import OrderRepository
+from app.adapters.persistence.repositories.payment_repository import PaymentRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
+from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.create_products_service import CreateProductsService
 from app.application.services.delete_products import DeleteProductsService
 from app.application.services.identify_customer_service import IdentifyCustomerService
+from app.application.services.list_payment_service import ListPaymentService
 from app.application.services.list_products_service import ListProductsService
 from app.application.services.orders.create_order_service import CreateOrderService
 from app.application.services.orders.get_all_order_service import GetAllOrderService
@@ -46,6 +51,14 @@ def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProducts
     repository = ProductRepository(db)
     return DeleteProductsService(repository)
 
+def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymentService:
+    client = MercadoPagoPixClient()
+    adapter = MercadoPagoPaymentService(client, db)
+    return CreatePixPaymentService(adapter)
+
+def get_list_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
+    repository = PaymentRepository(db)
+    return ListPaymentService(repository)
 def get_create_order_service(db: Session = Depends(get_db)) -> CreateOrderService:
     repository = OrderRepository(db)
     return CreateOrderService(repository)

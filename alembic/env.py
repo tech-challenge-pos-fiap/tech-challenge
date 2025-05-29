@@ -7,8 +7,8 @@ import os
 import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from adapters.persistence.models.base import Base
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 

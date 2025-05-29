@@ -1,27 +1,44 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException
+from requests.exceptions import HTTPError, RequestException
+from sqlalchemy.exc import NoResultFound
 
-from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequestDTO
-from app.adapters.external.mercado_pago.factory import get_payment_service
-from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
+from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
+from app.application.services.create_payment_service import CreatePixPaymentService
+from app.application.services.list_payment_service import ListPaymentService
 from app.config.db import get_db
+from app.config.dependencies import get_create_payment_service, get_list_payment_service
 
 router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
 
-
-@router.post("/pix")
-async def create_pix_payment(
-    payment_data: CreatePixPaymentRequestDTO,
-    payment_service: MercadoPagoPaymentService = Depends(get_payment_service),
-    db: Session = Depends(get_db)
+@router.post("/pix", response_model=PixPaymentResponse)
+def create_pix_payment(
+    payment_data: CreatePixPaymentRequest,
+    service: CreatePixPaymentService = Depends(get_create_payment_service),
 ):
-    return payment_service.create_pix_payment(payment_data.dict())
+    try:
+        result = service.execute(payment_data.dict())
+        return PixPaymentResponse(**result)
 
+    except HTTPError as e:
+        status_code = e.response.status_code if e.response else 502
+        detail = e.response.json() if e.response else str(e)
+        raise HTTPException(status_code=status_code, detail=detail) from e
 
-@router.get("/{payment_id}")
-async def get_payment_status(
+    except RequestException as e:
+        raise HTTPException(status_code=503, detail="Erro de comunicação com o Mercado Pago") from e
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Erro interno no servidor") from e
+
+@router.get("/{payment_id}", response_model=PaymentResponse)
+def get_payment(
     payment_id: str,
-    payment_service: MercadoPagoPaymentService = Depends(get_payment_service),
-    db: Session = Depends(get_db)
+    service: ListPaymentService = Depends(get_list_payment_service),
 ):
-    return payment_service.get_payment_status(payment_id)
+    try:
+        payment = service.execute(payment_id)
+        return PaymentResponse.from_orm(payment)
+    except NoResultFound as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro interno no servidor - {e}") from e
