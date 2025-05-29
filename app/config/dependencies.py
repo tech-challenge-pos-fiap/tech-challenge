@@ -53,12 +53,18 @@ def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProducts
 
 def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymentService:
     client = MercadoPagoPixClient()
-    adapter = MercadoPagoPaymentService(client, db)
-    return CreatePixPaymentService(adapter)
+    payment_adapter = MercadoPagoPaymentService(client, db)
+    order_repository = OrderRepository(db)
+    return CreatePixPaymentService(payment_adapter, order_repository)
 
-def get_list_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
+def get_get_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
     repository = PaymentRepository(db)
     return ListPaymentService(repository)
+
+def get_get_payment_service_by_order_id(db: Session = Depends(get_db)) -> ListPaymentService:
+    repository = PaymentRepository(db)
+    return ListPaymentService(repository)
+
 def get_create_order_service(db: Session = Depends(get_db)) -> CreateOrderService:
     repository = OrderRepository(db)
     return CreateOrderService(repository)

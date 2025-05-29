@@ -1,13 +1,13 @@
 from app.adapters.persistence.models.order import OrderModel
 from app.adapters.persistence.models.customer import CustomerModel
 from app.adapters.persistence.models.product import ProductModel
-from app.adapters.persistence.models.payment import Payment, PaymentProviderData
+from app.adapters.persistence.models.payment import Payment
 from app.adapters.persistence.models.base import Base
 import os
 import sys
 from logging.config import fileConfig
 
-from adapters.persistence.models.base import Base
+from app.adapters.persistence.models.base import Base
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context

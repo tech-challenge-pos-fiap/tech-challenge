@@ -28,6 +28,4 @@ class Payment:
     description: Optional[str]
     payment_method_id: str
     status: PaymentStatus
-    created_at: datetime
-    updated_at: datetime
-    error_message: Optional[str] = None
+    order_id: int

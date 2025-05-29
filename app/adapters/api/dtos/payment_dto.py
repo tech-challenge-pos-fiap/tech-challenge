@@ -31,6 +31,10 @@ class CreatePixPaymentRequest(BaseModel):
         max_length=256,
         description="Descrição do pagamento"
     )
+    order_id: Optional[int] = Field(
+        None,
+        description="ID da ordem associada ao pagamento"
+    )
     payer: Optional[Payer] = Field(None, description="Informações do pagador")
 
     class Config:
@@ -38,6 +42,7 @@ class CreatePixPaymentRequest(BaseModel):
             "example": {
                 "transaction_amount": 100,
                 "description": "Título do produto",
+                "order_id": 1,
                 "payer": {
                     "email": "teste@email.com",
                     "identification": {
@@ -55,6 +60,7 @@ class PixPaymentResponse(BaseModel):
     qr_code: str = Field(..., description="Código QR do PIX")
     qr_code_base64: str = Field(..., description="Código QR em base64")
     transaction_amount: float = Field(..., description="Valor da transação")
+    order_id: Optional[int] = Field(None, description="ID da ordem associada ao pagamento")
     created_at: str = Field(..., description="Data de criação do pagamento")
     updated_at: str = Field(..., description="Data da última atualização")
     payer: Optional[Payer]= Field(..., description="Informações do pagador")
@@ -70,6 +76,7 @@ class PixPaymentResponse(BaseModel):
                 ),
                 "qr_code_base64": "iVBORw0KGgoAAAANSUhEUgAA...",
                 "transaction_amount": 100.00,
+                "order_id": 1,
                 "created_at": "2024-03-20T10:00:00Z",
                 "updated_at": "2024-03-20T10:00:00Z",
                 "payer": {
@@ -104,8 +111,8 @@ class PaymentResponse(BaseModel):
     status: str = Field(..., description="Status do pagamento")
     amount: float = Field(..., description="Valor da transação")
     method: str = Field(..., description="ID do método de pagamento")
+    order_id: int = Field(None, description="ID da ordem associada ao pagamento")
     paid_at: Optional[datetime] = None
-
 
     class Config:
         from_attributes = True
