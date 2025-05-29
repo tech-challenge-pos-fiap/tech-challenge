@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from app.adapters.external.mercado_pago.payment_service import MercadoPagoPaymentService
 from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
 from app.adapters.persistence.repositories.customer_repository import CustomerRepository
-from app.adapters.persistence.repositories.payment_repository import PaymentRepository
 from app.adapters.persistence.repositories.order_repository import OrderRepository
+from app.adapters.persistence.repositories.payment_repository import PaymentRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
 from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.create_products_service import CreateProductsService
