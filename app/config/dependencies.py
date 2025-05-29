@@ -21,6 +21,7 @@ from app.application.services.sign_up_customer_service import SignUpCustomerServ
 from app.application.services.update_products_service import UpdateProductsService
 from app.config.db import get_db
 
+
 def get_sign_up_service(db: Session = Depends(get_db)) -> SignUpCustomerService:
     repository = CustomerRepository(db)
     return SignUpCustomerService(repository)
