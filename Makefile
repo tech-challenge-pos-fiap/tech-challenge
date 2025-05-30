@@ -10,3 +10,14 @@ migration:
 # Executa todas as migrations pendentes
 migrate:
 	docker compose run --rm $(CONTAINER) alembic upgrade head
+
+# Constrói a imagem
+build:
+	docker compose build
+
+up:
+	docker compose up
+
+rebuild:
+	docker compose down -v --remove-orphans
+	docker compose build --no-cache
