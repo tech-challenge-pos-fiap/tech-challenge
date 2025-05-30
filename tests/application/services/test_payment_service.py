@@ -5,7 +5,6 @@ import pytest
 
 from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.list_payment_service import ListPaymentService
-from app.domain.models.payment import PaymentMethod, PaymentStatus
 
 
 class MockPaymentPort:
@@ -20,7 +19,8 @@ class MockPaymentPort:
             "payer": payment_data.get("payer", {})
         }
 
-    def get_payment_by_id(self, payment_id):
+    def get_payment_by_id(self, payment_data):
+        payment_id = payment_data["id"]
         return {
             "id": payment_id,
             "status": "approved",
@@ -28,9 +28,15 @@ class MockPaymentPort:
             "method": "pix"
         }
 
+
+class MockOrderRepository:
+    def get(self, order_id):
+        return {"id": order_id, "status": "pending"}
+
 def test_create_pix_payment_service():
     mock_port = MockPaymentPort()
-    service = CreatePixPaymentService(mock_port)
+    mock_order_repo = MockOrderRepository()
+    service = CreatePixPaymentService(mock_port, mock_order_repo)
     payment_data = {
         "transaction_amount": 100.00,
         "description": "Test payment",
@@ -53,15 +59,16 @@ def test_list_payment_service():
     mock_port = MockPaymentPort()
     service = ListPaymentService(mock_port)
     payment_id = 1
-    result = service.execute(payment_id)
-    assert result["id"] == 1
+    result = service.get_payment_by_id({"id": payment_id})
+    assert result["id"] == payment_id
     assert result["status"] == "approved"
     assert result["amount"] == 100.00
     assert result["method"] == "pix"
 
 def test_create_pix_payment_service_with_invalid_data():
     mock_port = MockPaymentPort()
-    service = CreatePixPaymentService(mock_port)
+    mock_order_repo = MockOrderRepository()
+    service = CreatePixPaymentService(mock_port, mock_order_repo)
     payment_data = {
         "payment_method_id": "pix"
     }
@@ -71,7 +78,8 @@ def test_create_pix_payment_service_with_invalid_data():
 def test_create_pix_payment_service_with_mp_error():
     mock_port = MagicMock()
     mock_port.create_pix_payment.side_effect = Exception("MP API Error")
-    service = CreatePixPaymentService(mock_port)
+    mock_order_repo = MockOrderRepository()
+    service = CreatePixPaymentService(mock_port, mock_order_repo)
     payment_data = {
         "transaction_amount": 100.00,
         "description": "Test payment",

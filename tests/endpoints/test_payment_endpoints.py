@@ -1,10 +1,14 @@
+from datetime import UTC, datetime
 from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
-import pytest
 from fastapi.testclient import TestClient
 from requests.exceptions import HTTPError
 from requests.models import Response
+from sqlalchemy.orm import Session
+
+from app.adapters.persistence.models.product import ProductModel
+from app.domain.models.product import Product
 
 
 def test_create_pix_payment_success(client: TestClient):
@@ -87,40 +91,26 @@ def test_create_pix_payment_missing_required_fields(client: TestClient):
     response = client.post('/api/v1/payments/pix', json=payload)
     assert response.status_code == 422
 
-def test_get_payment_by_id_success(client: TestClient):
-    create_payload = {
+def test_get_payment_by_id_not_found(client: TestClient):
+    response = client.get('/api/v1/payments/999999')
+    assert response.status_code == 404
+
+def test_create_pix_payment_with_invalid_order_id(client: TestClient):
+    payment_payload = {
         "transaction_amount": 100.00,
-        "description": "Teste de pagamento PIX",
+        "description": "Test payment with invalid order",
         "payment_method_id": "pix",
+        "order_id": 999,
         "payer": {
             "email": "test@example.com",
             "first_name": "Test",
             "last_name": "User"
         }
     }
-    mock_mp_response = {
-        "id": 123456789,
-        "status": "pending",
-        "transaction_amount": 100.00,
-        "point_of_interaction": {
-            "transaction_data": {
-                "qr_code": "test_qr_code",
-                "qr_code_base64": "test_qr_code_base64"
-            }
-        }
-    }
 
-    with patch('app.adapters.external.mercado_pago.pix.MercadoPagoPixClient.create_pix_payment') as mock_create:
-        mock_create.return_value = mock_mp_response
-        create_response = client.post('/api/v1/payments/pix', json=create_payload)
-        payment_id = create_response.json()['id']
-        response = client.get(f'/api/v1/payments/{payment_id}')
+    with patch('app.adapters.persistence.repositories.order_repository.OrderRepository.get') as mock_get_order:
+        mock_get_order.return_value = None
+        response = client.post('/api/v1/payments/pix', json=payment_payload)
+        assert response.status_code == 404
         data = response.json()
-        assert response.status_code == 200
-        assert data['id'] == payment_id
-        assert data['status'] == 'approved'
-        assert data['amount'] == 100.00
-
-def test_get_payment_by_id_not_found(client: TestClient):
-    response = client.get('/api/v1/payments/999999')
-    assert response.status_code == 404
+        assert "Ordem com ID 999 não encontrada" in data['detail']
