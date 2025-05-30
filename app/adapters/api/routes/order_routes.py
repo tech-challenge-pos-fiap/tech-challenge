@@ -12,10 +12,11 @@ from app.config.dependencies import (
     get_update_order_service,
 )
 
-router = APIRouter(prefix="/api/v1/orders", tags=["orders"])
+router = APIRouter(prefix="/orders", tags=["orders"])
+
 @router.post("/")
 def create_order(order: WriteOrderDTO, service: CreateOrderService = Depends(get_create_order_service)):
-    return service.execute(order.dict())
+    return service.execute(order.model_dump())
 
 @router.get("/{order_id}")
 def get_order(order_id: int, service: GetOrderService = Depends(get_get_order_service)):
@@ -27,4 +28,4 @@ def get_all_orders(skip: int = 0, limit: int = 10, service: GetAllOrderService =
 
 @router.put("/{order_id}")
 def update_order(order_id: int, order: WriteOrderDTO, service: UpdateOrderService = Depends(get_update_order_service)):
-    return service.execute(order_id, order.dict())
+    return service.execute(order_id, order.model_dump())

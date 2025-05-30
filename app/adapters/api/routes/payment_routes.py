@@ -5,14 +5,13 @@ from sqlalchemy.exc import NoResultFound
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
 from app.application.services.create_payment_service import CreatePixPaymentService
 from app.application.services.list_payment_service import ListPaymentService
-from app.config.db import get_db
 from app.config.dependencies import (
     get_create_payment_service,
     get_get_payment_service,
     get_get_payment_service_by_order_id,
 )
 
-router = APIRouter(prefix="/api/v1/payments", tags=["payments"])
+router = APIRouter(prefix="/payments", tags=["payments"])
 
 @router.get("/order/{order_id}", response_model=list[PaymentResponse])
 def get_payments_by_order(
@@ -21,7 +20,7 @@ def get_payments_by_order(
 ):
     try:
         payments = service.get_payment_by_order_id(order_id)
-        return [PaymentResponse.from_orm(p) for p in payments]
+        return [PaymentResponse.model_validate(p) for p in payments]
     except NoResultFound as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e)) from e
     except Exception as e:
