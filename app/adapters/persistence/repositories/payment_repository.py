@@ -33,7 +33,7 @@ class PaymentRepository:
         """
         payments = self.db.query(Payment).filter(Payment.order_id == order_id).all()
         if not payments:
-            raise NoResultFound("Order {order_id} não possui pagamentos.")
+            raise NoResultFound(f"Order {order_id} não possui pagamentos.")
         for payment in payments:
             payment.status = PaymentStatus.APPROVED
             payment.paid_at = datetime.now()
