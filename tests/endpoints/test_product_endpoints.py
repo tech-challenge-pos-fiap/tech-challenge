@@ -26,7 +26,7 @@ def test_list_products_by_category(client: TestClient):
         'price': 29.99,
         'category': 'drinks'
     }
-    client.post('/products', json=payload)
+    client.post('/api/v1/products', json=payload)
 
     response = client.get('api/v1/products/category/drinks')
     data = response.json()
