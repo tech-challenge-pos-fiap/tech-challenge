@@ -34,7 +34,6 @@ def test_create_pix_payment_success(client: TestClient):
 
         response = client.post('/api/v1/payments/pix', json=payload)
         data = response.json()
-        print(data)
         assert response.status_code == 200
         assert data['status'] == 'pending'
         assert data['transaction_amount'] == 100.00
