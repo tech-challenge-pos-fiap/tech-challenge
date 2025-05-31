@@ -22,13 +22,18 @@ Clone o repositório:
 git clone https://github.com/tech-challenge-pos-fiap/tech-challenge.git
 cd tech-challenge
 ```
+Construa a imagem Docker:
+```sh
+make build
+```
+
 Rode as migrations do Alembic:
 ```sh
 make migrate
 ```
-Construa a imagem e suba o container:
+
+Suba o container:
 ```sh
-make build
 make up
 ```
 O arquivo **Makefile** possui alguns outros comandos úteis para o projeto.
