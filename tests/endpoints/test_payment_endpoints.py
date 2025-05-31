@@ -5,7 +5,6 @@ from requests.exceptions import HTTPError
 from requests.models import Response
 
 
-
 def test_create_pix_payment_success(client: TestClient):
     payload = {
         "transaction_amount": 100.00,
