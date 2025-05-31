@@ -1,4 +1,3 @@
-from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any, Dict
 
@@ -7,8 +6,8 @@ from sqlalchemy.orm import Session
 from app.adapters.external.mercado_pago.pix import MercadoPagoPixClient
 from app.adapters.persistence.models.payment import Payment
 from app.adapters.persistence.repositories.payment_repository import PaymentRepository
+from app.application.ports.payment_port import PaymentPort
 from app.domain.models.payment import PaymentMethod
-from app.domain.ports.payment_port import PaymentPort
 
 
 class MercadoPagoPaymentService(PaymentPort):

@@ -1,14 +1,8 @@
-from datetime import UTC, datetime
-from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
 from requests.exceptions import HTTPError
 from requests.models import Response
-from sqlalchemy.orm import Session
-
-from app.adapters.persistence.models.product import ProductModel
-from app.domain.models.product import Product
 
 
 def test_create_pix_payment_success(client: TestClient):

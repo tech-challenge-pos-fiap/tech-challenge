@@ -3,7 +3,7 @@ from typing import Any, Dict
 from fastapi import HTTPException, status
 
 from app.application.ports.order_repository_port import OrderRepositoryPort
-from app.domain.ports.payment_port import PaymentPort
+from app.application.ports.payment_port import PaymentPort
 
 
 class CreatePixPaymentService:

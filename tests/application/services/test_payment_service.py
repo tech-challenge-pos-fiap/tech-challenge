@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.application.services.create_payment_service import CreatePixPaymentService
-from app.application.services.list_payment_service import ListPaymentService
+from app.application.services.payments.create_payment_service import CreatePixPaymentService
+from app.application.services.payments.list_payment_service import ListPaymentService
 
 
 class MockPaymentPort:
