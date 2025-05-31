@@ -3,8 +3,8 @@ from requests.exceptions import HTTPError, RequestException
 from sqlalchemy.exc import NoResultFound
 
 from app.adapters.api.dtos.payment_dto import CreatePixPaymentRequest, PaymentResponse, PixPaymentResponse
-from app.application.services.create_payment_service import CreatePixPaymentService
-from app.application.services.list_payment_service import ListPaymentService
+from app.application.services.payments.create_payment_service import CreatePixPaymentService
+from app.application.services.payments.list_payment_service import ListPaymentService
 from app.config.dependencies import (
     get_create_payment_service,
     get_get_payment_service,

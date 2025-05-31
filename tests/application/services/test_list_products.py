@@ -1,4 +1,4 @@
-from app.application.services.list_products_service import ListProductsService
+from app.application.services.products.list_products_service import ListProductsService
 from app.domain.models.product import Product
 
 
