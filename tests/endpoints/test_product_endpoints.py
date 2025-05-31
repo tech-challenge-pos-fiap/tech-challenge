@@ -9,7 +9,7 @@ def test_create_product(client: TestClient):
         'category': 'burguers'
     }
 
-    response = client.post('/products', json=payload)
+    response = client.post('/api/v1/products', json=payload)
     data = response.json()
 
     assert response.status_code == 201
@@ -28,7 +28,7 @@ def test_list_products_by_category(client: TestClient):
     }
     client.post('/products', json=payload)
 
-    response = client.get('/products/category/drinks')
+    response = client.get('api/v1/products/category/drinks')
     data = response.json()
 
     assert response.status_code == 200
@@ -43,7 +43,7 @@ def test_update_product(client: TestClient):
         'price': 10.0,
         'category': 'appetizers'
     }
-    response_create = client.post('/products', json=payload)
+    response_create = client.post('api/v1/products', json=payload)
     product_id = response_create.json()['data'].get('id')  # precisa retornar id
 
     updated_payload = {
@@ -53,7 +53,7 @@ def test_update_product(client: TestClient):
         'category': 'burguers'
     }
 
-    response_update = client.put(f'/products/{product_id}', json=updated_payload)
+    response_update = client.put(f'api/v1/products/{product_id}', json=updated_payload)
     data = response_update.json()
 
     assert response_update.status_code == 200
@@ -69,14 +69,14 @@ def test_delete_product(client: TestClient):
         'price': 5.0,
         'category': 'desserts'
     }
-    response_create = client.post('/products', json=payload)
+    response_create = client.post('api/v1/products', json=payload)
     product_id = response_create.json()['data'].get('id')
 
-    response_delete = client.delete(f'/products/{product_id}')
+    response_delete = client.delete(f'api/v1/products/{product_id}')
     data = response_delete.json()
 
     assert response_delete.status_code == 200
     assert data['message'] == 'Produto deletado com sucesso.'
 
-    response_delete_again = client.delete(f'/products/{product_id}')
+    response_delete_again = client.delete(f'api/v1/products/{product_id}')
     assert response_delete_again.status_code == 404
