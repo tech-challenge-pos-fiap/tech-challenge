@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: your-dockerhub-user/tech-api:latest  # ajuste para o nome da sua imagem
+          image: your-dockerhub-user/tech-api:latest
           ports:
             - containerPort: 80
           envFrom:
