@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.adapters.persistence.models.product import ProductModel
 from app.application.ports.product_repository_port import ProductRepositoryPort
-from app.domain.models.product import Product
+from app.domain.entities.product import Product
 
 
 class ProductRepository(ProductRepositoryPort):

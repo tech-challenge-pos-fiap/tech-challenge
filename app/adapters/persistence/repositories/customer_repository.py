@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.adapters.persistence.models.customer import CustomerModel
 from app.application.ports.customer_repository_port import CustomerRepositoryPort
-from app.domain.models.customer import Customer
+from app.domain.entities.customer import Customer
 from app.domain.value_objects.cpf import CPF
 
 

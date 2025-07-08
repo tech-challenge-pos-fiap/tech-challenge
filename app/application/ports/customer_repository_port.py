@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from app.domain.models.customer import Customer
+from app.domain.entities.customer import Customer
 from app.domain.value_objects.cpf import CPF
 
 

@@ -1,7 +1,7 @@
 from sqlalchemy import JSON, Column, DateTime, Enum, ForeignKey, Integer, Numeric
 from sqlalchemy.orm import relationship
 
-from app.domain.models.payment import PaymentMethod, PaymentStatus
+from app.domain.entities.payment import PaymentMethod, PaymentStatus
 
 from .base import TimestampMixin
 

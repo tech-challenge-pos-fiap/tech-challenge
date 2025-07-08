@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.domain.models.order import Order
+from app.domain.entities.order import Order
 
 
 class OrderRepositoryPort(ABC):

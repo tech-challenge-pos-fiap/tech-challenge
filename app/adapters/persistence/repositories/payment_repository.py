@@ -5,7 +5,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from app.adapters.persistence.models.payment import Payment
-from app.domain.models.payment import PaymentStatus
+from app.domain.entities.payment import PaymentStatus
 
 
 class PaymentRepository:

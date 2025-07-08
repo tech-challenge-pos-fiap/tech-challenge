@@ -1,5 +1,5 @@
 from app.application.services.products.list_products_service import ListProductsService
-from app.domain.models.product import Product
+from app.domain.entities.product import Product
 
 
 class ProdutoRepoFake:

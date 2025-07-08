@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.domain.models.product import Product
+from app.domain.entities.product import Product
 
 
 class ProductRepositoryPort(ABC):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.adapters.persistence.models.order import OrderModel, OrderStatus, ProductOrderModel
 from app.adapters.persistence.models.product import ProductModel
 from app.application.ports.order_repository_port import OrderRepositoryPort
-from app.domain.models.order import Order
+from app.domain.entities.order import Order
 
 
 class OrderRepository(OrderRepositoryPort):

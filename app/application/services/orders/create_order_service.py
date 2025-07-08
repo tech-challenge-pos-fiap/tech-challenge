@@ -1,5 +1,5 @@
 from app.application.ports.order_repository_port import OrderRepositoryPort
-from app.domain.models.order import Order
+from app.domain.entities.order import Order
 
 
 class CreateOrderService:
