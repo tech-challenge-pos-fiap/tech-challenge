@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-
 from app.domain.entities.customer import Customer
 
 
 @dataclass
 class CustomerMapper:
-    id: str
+    id: int
     name: str
     email: str
     cpf: str

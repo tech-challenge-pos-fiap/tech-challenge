@@ -11,6 +11,7 @@ class CustomerRepository(CustomerRepositoryPort):
 
     def _mapper_to_model(self, customer: CustomerMapper) -> CustomerModel:
         return CustomerModel(
+            id=customer.id,
             name=customer.name,
             email=customer.email,
             cpf=customer.cpf

@@ -2,7 +2,7 @@ from app.application.ports.orders.order_repository_gateway import OrderRepositor
 from app.domain.entities.order import Order
 
 
-class GetAllOrderUseCase:
+class GetAllOrdersUseCase:
     def __init__(self, repository_gateway: OrderRepositoryGatewayPort):
         self.repository_gateway = repository_gateway
 
