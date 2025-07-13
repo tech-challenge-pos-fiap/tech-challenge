@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from app.adapters.controllers.customer_identify_controller import CustomerIdentifyController
-from app.adapters.controllers.customer_sign_up_controller import CustomerSignUpController
+from app.adapters.controllers.customers.customer_identify_controller import CustomerIdentifyController
+from app.adapters.controllers.customers.customer_sign_up_controller import CustomerSignUpController
 from app.adapters.controllers.dtos.customer_dtos import CustomerIdentifyDTO, CustomerSignUpDTO
 from app.infrastructure.dependencies.customer_dependencies import (
     get_identify_customer_controller,
