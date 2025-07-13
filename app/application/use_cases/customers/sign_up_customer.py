@@ -1,5 +1,5 @@
 from app.application.ports.customers.customer_repository_gateway import CustomerRepositoryGatewayPort
-from app.domain.models.customer import Customer
+from app.domain.entities.customer import Customer
 
 
 class SignUpCustomerUseCase:
