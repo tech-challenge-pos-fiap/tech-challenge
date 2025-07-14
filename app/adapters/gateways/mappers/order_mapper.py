@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
+
 from app.domain.entities.order import Order, OrderStatus
 
 

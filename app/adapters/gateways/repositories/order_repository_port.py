@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from app.adapters.gateways.mappers.order_mapper import OrderMapper
 
 

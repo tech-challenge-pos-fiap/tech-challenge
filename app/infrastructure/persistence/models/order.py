@@ -6,7 +6,6 @@ from sqlalchemy.orm import Mapped, relationship
 
 from .base import TimestampMixin
 
-
 ProductOrderModel = Table(
     'product_order',
     TimestampMixin.metadata,

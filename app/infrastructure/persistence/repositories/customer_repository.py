@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.gateways.repositories.customer_repository_port import CustomerRepositoryPort
 from app.adapters.gateways.mappers.customer_mapper import CustomerMapper
+from app.adapters.gateways.repositories.customer_repository_port import CustomerRepositoryPort
 from app.infrastructure.persistence.models.customer import CustomerModel
 
 
