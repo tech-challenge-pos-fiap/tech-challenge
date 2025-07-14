@@ -4,7 +4,7 @@ from app.application.ports.products.product_repository_gateway import ProductRep
 from app.domain.entities.product import Product
 
 
-class ListProductsUseCase:
+class ListProductsByCategoryUseCase:
     def __init__(self, repository_gateway: ProductRepositoryGatewayPort):
         self.repository_gateway = repository_gateway
 

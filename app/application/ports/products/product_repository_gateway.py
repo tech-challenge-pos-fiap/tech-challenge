@@ -16,11 +16,11 @@ class ProductRepositoryGatewayPort(ABC):
         pass
 
     @abstractmethod
-    def update(self, id: int, product: Product) -> Product:
+    def update(self, product_id: int, product: Product) -> Product:
         """Update a product based on a id passed"""
         pass
 
     @abstractmethod
-    def delete(self, id: int) -> bool:
+    def delete(self, product_id: int) -> bool:
         """Delete a product based on a id passed"""
         pass
