@@ -9,4 +9,4 @@ class ListProductsByCategoryController:
 
     def execute(self, category: str, skip: int = 0, limit: int = 10):
         products = self.use_case.execute(category, skip, limit)
-        return self.presenter.present_list(products)
+        return [self.presenter.present(product) for product in products]

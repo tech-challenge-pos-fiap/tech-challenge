@@ -15,6 +15,8 @@ class CustomerRepositoryGateway(CustomerRepositoryGatewayPort):
 
     def get_by_email(self, email):
         customer_mapper = self.repository.get_by_email(email)
+        if not customer_mapper:
+            return None
         return customer_mapper.to_entity()
 
     def get_by_cpf(self, cpf):

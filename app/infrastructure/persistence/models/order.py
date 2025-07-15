@@ -4,6 +4,8 @@ from typing import List, Optional
 from sqlalchemy import Column, Enum, Float, ForeignKey, Integer, Table
 from sqlalchemy.orm import Mapped, relationship
 
+from app.infrastructure.persistence.models.payment import PaymentModel
+
 from .base import TimestampMixin
 
 ProductOrderModel = Table(
@@ -34,4 +36,4 @@ class OrderModel(TimestampMixin):
     total_price = Column(Float, nullable=False)
     customer_id = Column(Integer, ForeignKey('customers.id'), nullable=True)
     customer: Mapped[Optional["CustomerModel"]] = relationship("CustomerModel", back_populates="orders")
-    payments = relationship("Payment", back_populates="order")
+    payments: Mapped[List["PaymentModel"]] = relationship(PaymentModel, back_populates="order")

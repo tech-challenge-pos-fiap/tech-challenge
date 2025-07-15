@@ -10,5 +10,5 @@ class CustomerPresenter:
             'id': customer.id,
             'name': customer.name,
             'email': customer.email,
-            'cpf': customer.cpf.value if customer.cpf else None
+            'cpf': customer.cpf,
         }

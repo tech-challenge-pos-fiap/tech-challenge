@@ -37,5 +37,5 @@ class CustomerRepository(CustomerRepositoryPort):
         return self._model_to_mapper(instance) if instance else None
 
     def get_by_cpf(self, cpf: str) -> CustomerMapper:
-        instance = self.session.query(CustomerModel).filter_by(cpf=cpf).first()
+        instance = self.session.query(CustomerModel).filter_by(cpf=str(cpf)).first()
         return self._model_to_mapper(instance) if instance else None

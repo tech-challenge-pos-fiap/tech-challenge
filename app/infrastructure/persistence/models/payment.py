@@ -6,7 +6,7 @@ from app.domain.entities.payment import PaymentMethod, PaymentStatus
 from .base import TimestampMixin
 
 
-class Payment(TimestampMixin):
+class PaymentModel(TimestampMixin):
     __tablename__ = "payments"
 
     id = Column(Integer, primary_key=True)
