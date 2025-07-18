@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.application.services.payments.create_payment_service import CreatePixPaymentService
-from app.application.services.payments.list_payment_service import ListPaymentService
+from app.application.use_cases.payments.create_pix_payment import CreatePixPaymentUseCase
+from app.application.use_cases.payments import ListPaymentService
 
 
 class MockPaymentPort:
@@ -36,7 +36,7 @@ class MockOrderRepository:
 def test_create_pix_payment_service():
     mock_port = MockPaymentPort()
     mock_order_repo = MockOrderRepository()
-    service = CreatePixPaymentService(mock_port, mock_order_repo)
+    service = CreatePixPaymentUseCase(mock_port, mock_order_repo)
     payment_data = {
         "transaction_amount": 100.00,
         "description": "Test payment",
@@ -68,7 +68,7 @@ def test_list_payment_service():
 def test_create_pix_payment_service_with_invalid_data():
     mock_port = MockPaymentPort()
     mock_order_repo = MockOrderRepository()
-    service = CreatePixPaymentService(mock_port, mock_order_repo)
+    service = CreatePixPaymentUseCase(mock_port, mock_order_repo)
     payment_data = {
         "payment_method_id": "pix"
     }
@@ -79,7 +79,7 @@ def test_create_pix_payment_service_with_mp_error():
     mock_port = MagicMock()
     mock_port.create_pix_payment.side_effect = Exception("MP API Error")
     mock_order_repo = MockOrderRepository()
-    service = CreatePixPaymentService(mock_port, mock_order_repo)
+    service = CreatePixPaymentUseCase(mock_port, mock_order_repo)
     payment_data = {
         "transaction_amount": 100.00,
         "description": "Test payment",

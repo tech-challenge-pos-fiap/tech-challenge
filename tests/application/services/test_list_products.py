@@ -1,4 +1,4 @@
-from app.application.services.products.list_products_service import ListProductsService
+from app.application.use_cases.products.list_products_by_category import ProductRepositoryGatewayPort
 from app.domain.entities.product import Product
 
 
@@ -9,7 +9,7 @@ class ProdutoRepoFake:
 
 def test_list_products():
     repo_fake = ProdutoRepoFake()
-    service = ListProductsService(repo_fake)
+    service = ProductRepositoryGatewayPort(repo_fake)
     produtos = service.execute('lanche')
 
     assert len(produtos) == 1
