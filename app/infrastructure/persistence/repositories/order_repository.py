@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 
 from app.adapters.gateways.mappers.order_mapper import OrderMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
-from app.infrastructure.persistence.models.order import OrderModel
 from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
+from app.infrastructure.persistence.models.order import OrderModel
 
 
 class OrderRepository(OrderRepositoryPort):
@@ -66,7 +66,7 @@ class OrderRepository(OrderRepositoryPort):
         self.session.delete(order_model)
         self.session.commit()
         return True
-    
+
     def update_status(self, order_id: str, status: str) -> OrderMapper:
         order_model = self.session.query(OrderModel).filter(OrderModel.id == order_id).first()
         if not order_model:
@@ -76,7 +76,7 @@ class OrderRepository(OrderRepositoryPort):
         self.session.commit()
         self.session.refresh(order_model)
         return self._model_to_mapper(order_model)
-    
+
     def checkout(self, order_id: str) -> OrderMapper:
         order_model = self.session.query(OrderModel).filter(OrderModel.id == order_id).first()
         if not order_model:
@@ -88,17 +88,17 @@ class OrderRepository(OrderRepositoryPort):
         self.session.commit()
         self.session.refresh(order_model)
         return self._model_to_mapper(order_model)
-    
+
     def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         order_models = self.session.query(OrderModel).filter(OrderModel.customer_id == customer_id).offset(skip).limit(limit).all()
         return [self._model_to_mapper(order_model) for order_model in order_models]
-    
+
     def get_by_status(self, status: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         order_models = self.session.query(OrderModel).filter(OrderModel.status == status).offset(skip).limit(limit).all()
         return [self._model_to_mapper(order_model) for order_model in order_models]
-    
+
     def count_orders(self) -> int:
         return self.session.query(OrderModel).count()
-    
+
     def exists(self, order_id: str) -> bool:
-        return self.session.query(OrderModel.id).filter(OrderModel.id == order_id).scalar() is not None 
+        return self.session.query(OrderModel.id).filter(OrderModel.id == order_id).scalar() is not None

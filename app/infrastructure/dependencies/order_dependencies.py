@@ -4,17 +4,15 @@ from sqlalchemy.orm import Session
 from app.adapters.controllers.orders.create_order_controller import CreateOrderController
 from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrdersController
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
-from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
+from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway, OrderRepositoryGatewayPort
 from app.adapters.presenters.order_presenter import OrderPresenter
+from app.application.use_cases.orders.checkout_order import CheckoutOrder
 from app.application.use_cases.orders.create_order import CreateOrderUseCase
 from app.application.use_cases.orders.get_all_orders import GetAllOrdersUseCase
 from app.application.use_cases.orders.get_order_by_id import GetOrderByIdUseCase
+from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
 from app.config.database import get_database_session
 from app.infrastructure.persistence.repositories.order_repository import OrderRepository
-from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
-from app.application.use_cases.orders.checkout_order import CheckoutOrder
-from app.adapters.gateways.order_repository_gateway import OrderRepositoryGatewayPort
-from app.config.database import get_database_session
 
 
 def get_order_repository(session: Session = Depends(get_database_session)) -> OrderRepository:

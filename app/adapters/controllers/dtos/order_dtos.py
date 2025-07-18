@@ -1,8 +1,10 @@
 from enum import Enum
 from typing import Optional
+
 from pydantic import BaseModel, Field
 
 from .checkout_order_dto import ProductOrderDTO
+
 
 class OrderStatus(str, Enum):
     RECEIVED = 'received'
