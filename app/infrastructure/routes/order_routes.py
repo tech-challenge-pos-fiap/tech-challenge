@@ -9,6 +9,8 @@ from app.infrastructure.dependencies.order_dependencies import (
     get_create_order_controller,
     get_get_all_orders_controller,
     get_get_order_by_id_controller,
+    get_update_order_status_use_case,
+    get_checkout_order_use_case,
 )
 from app.infrastructure.routes.schemas.order_schemas import (
     CreateOrderRequestSchema,

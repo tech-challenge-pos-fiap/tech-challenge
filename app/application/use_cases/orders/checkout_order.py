@@ -1,4 +1,5 @@
-from app.application.ports.orders.order_repository_gateway import OrderRepositoryGateway
+from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
+
 from app.domain.entities.order import Order, OrderStatus
 
 class CheckoutOrder:
