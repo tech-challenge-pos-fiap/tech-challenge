@@ -1,5 +1,8 @@
 from enum import Enum
+from typing import Optional
 from pydantic import BaseModel, Field
+
+from .product_dtos import ProductOrderDTO
 
 class OrderStatus(str, Enum):
     RECEIVED = 'received'
@@ -12,5 +15,7 @@ class UpdateOrderStatusDTO(BaseModel):
 
 class CheckoutOrderDTO(BaseModel):
     products: list[ProductOrderDTO]
-    customer_id: Optional[int] = None
+    customer_id: Optional[int] = None = Field(
+        None, description="ID of the customer placing the order"
+    )
     total_price: float = Field(..., gt=0, description="Total price of the order")
