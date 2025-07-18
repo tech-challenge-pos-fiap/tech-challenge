@@ -15,7 +15,5 @@ class UpdateOrderStatusDTO(BaseModel):
 
 class CheckoutOrderDTO(BaseModel):
     products: list[ProductOrderDTO]
-    customer_id: Optional[int] = None = Field(
-        None, description="ID of the customer placing the order"
-    )
+    customer_id: Optional[int] = Field(None, description="ID of the customer placing the order")
     total_price: float = Field(..., gt=0, description="Total price of the order")
