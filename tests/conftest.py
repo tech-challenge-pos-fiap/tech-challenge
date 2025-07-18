@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
-from app.adapters.persistence.models.base import Base
+from app.infrastructure.persistence.models.base import Base
 from app.config.db import get_db
 from main import app
 
