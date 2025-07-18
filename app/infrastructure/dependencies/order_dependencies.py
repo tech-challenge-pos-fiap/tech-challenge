@@ -60,3 +60,13 @@ def get_get_order_by_id_controller(
 ) -> GetOrderByIdController:
     presenter = OrderPresenter()
     return GetOrderByIdController(use_case, presenter)
+
+def get_update_order_status_use_case(
+    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
+) -> UpdateOrderStatus:
+    return UpdateOrderStatus(order_repository_gateway)
+
+def get_checkout_order_use_case(
+    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
+) -> CheckoutOrder:
+    return CheckoutOrder(order_repository_gateway)

@@ -21,6 +21,10 @@ class OrderStatus(enum.Enum):
     PENDING = 'pending'
     DELIVERED = 'delivered'
     CANCELED = 'canceled'
+    RECEIVED = 'received'
+    IN_PREPARATION = 'in_preparation'
+    READY = 'ready'
+    FINISHED = 'finished'
 
 
 class OrderModel(TimestampMixin):
