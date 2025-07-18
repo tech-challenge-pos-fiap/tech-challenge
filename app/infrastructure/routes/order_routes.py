@@ -5,6 +5,9 @@ from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrde
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
 from app.adapters.controllers.orders.checkout_order_controller import create_checkout_order_endpoint
 from app.adapters.controllers.orders.update_order_status_controller import update_status_endpoint
+from app.adapters.controllers.dtos.order_dtos import UpdateOrderStatusDTO
+from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
+from app.application.use_cases.orders.checkout_order import CheckoutOrder
 from app.infrastructure.dependencies.order_dependencies import (
     get_create_order_controller,
     get_get_all_orders_controller,
