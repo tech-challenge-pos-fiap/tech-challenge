@@ -90,11 +90,21 @@ class OrderRepository(OrderRepositoryPort):
         return self._model_to_mapper(order_model)
 
     def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
-        order_models = self.session.query(OrderModel).filter(OrderModel.customer_id == customer_id).offset(skip).limit(limit).all()
+        order_models = (
+        self.session.query(OrderModel)
+        .filter(OrderModel.customer_id == customer_id)
+        .offset(skip)
+        .limit(limit)
+        .all())
         return [self._model_to_mapper(order_model) for order_model in order_models]
 
     def get_by_status(self, status: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
-        order_models = self.session.query(OrderModel).filter(OrderModel.status == status).offset(skip).limit(limit).all()
+        order_models = (
+        self.session.query(OrderModel)
+        .filter(OrderModel.status == status)
+        .offset(skip)
+        .limit(limit)
+        .all())
         return [self._model_to_mapper(order_model) for order_model in order_models]
 
     def count_orders(self) -> int:
