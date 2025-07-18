@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
 from app.infrastructure.persistence.models.base import Base
-from app.config.db import get_db
+from app.config.database import get_database_session
 from main import app
 
 DATABASE_URL = "sqlite:///./tests/test.db"
@@ -27,7 +27,7 @@ def override_get_db():
         db.close()
 
 
-app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[get_database_session] = override_get_db
 
 
 @pytest.fixture
