@@ -1,5 +1,6 @@
 from decimal import Decimal
 from typing import Optional
+
 from pydantic import BaseModel, Field
 
 from app.infrastructure.routes.schemas.customer_schemas import CustomerResponseSchema

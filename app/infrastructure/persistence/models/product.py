@@ -1,6 +1,9 @@
 from enum import Enum
-from sqlalchemy import String, Float, Enum as SqlEnum
+
+from sqlalchemy import Enum as SqlEnum
+from sqlalchemy import Float, String
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.infrastructure.persistence.models.base import TimestampMixin
 
 

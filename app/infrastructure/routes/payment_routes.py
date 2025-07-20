@@ -3,9 +3,12 @@ from fastapi import APIRouter, Depends
 from app.adapters.controllers.payments.get_payment_by_id_controller import GetPaymentByIdController
 from app.adapters.controllers.payments.get_payments_by_order_id_controller import GetPaymentsByOrderIdController
 from app.adapters.controllers.payments.process_payment_controller import ProcessPaymentController
-from app.infrastructure.dependencies.payment_dependencies import get_get_payment_by_id_controller, get_get_payments_by_order_id_controller, get_process_payment_controller
+from app.infrastructure.dependencies.payment_dependencies import (
+    get_get_payment_by_id_controller,
+    get_get_payments_by_order_id_controller,
+    get_process_payment_controller,
+)
 from app.infrastructure.routes.schemas.payment_schemas import PaymentResponse, ProcessPaymentRequest
-
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 

@@ -1,5 +1,5 @@
-from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.adapters.gateways.repositories.customer_repository_port import CustomerRepositoryPort
+from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.application.ports.customers.customer_repository_gateway import CustomerRepositoryGatewayPort
 from app.domain.entities.customer import Customer
 

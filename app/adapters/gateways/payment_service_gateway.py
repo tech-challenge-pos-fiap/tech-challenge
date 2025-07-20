@@ -1,7 +1,8 @@
 from dataclasses import asdict
+
+from app.adapters.gateways.services.payment_process_service import PaymentProcessServicePort
 from app.application.ports.payments.payment_service_gateway import PaymentServiceGatewayPort
 from app.domain.entities.payment import Payment
-from app.adapters.gateways.services.payment_process_service import PaymentProcessServicePort
 
 
 class PaymentServiceGateway(PaymentServiceGatewayPort):

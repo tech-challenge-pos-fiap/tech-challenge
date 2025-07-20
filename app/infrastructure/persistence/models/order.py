@@ -1,13 +1,14 @@
 from enum import Enum
 from typing import List, Optional
 
-from sqlalchemy import Enum as SqlEnum, Float, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import Enum as SqlEnum
+from sqlalchemy import Float, ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.infrastructure.persistence.models.product import ProductModel
 from app.infrastructure.persistence.models.payment import PaymentModel
+from app.infrastructure.persistence.models.product import ProductModel
 
-from .base import TimestampMixin, Base
+from .base import Base, TimestampMixin
 
 
 class OrderStatus(str, Enum):

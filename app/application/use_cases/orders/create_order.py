@@ -1,4 +1,5 @@
 from typing import Optional
+
 from app.application.ports.customers.customer_repository_gateway import CustomerRepositoryGatewayPort
 from app.application.ports.orders.order_repository_gateway import OrderRepositoryGatewayPort
 from app.application.ports.products.product_repository_gateway import ProductRepositoryGatewayPort
