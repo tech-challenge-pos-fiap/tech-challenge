@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.gateways.mappers.customer_mapper import CustomerMapper
+from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.adapters.gateways.repositories.customer_repository_port import CustomerRepositoryPort
 from app.infrastructure.persistence.models.customer import CustomerModel
 
@@ -31,6 +31,10 @@ class CustomerRepository(CustomerRepositoryPort):
         self.session.commit()
         self.session.refresh(instance)
         return self._model_to_mapper(instance)
+
+    def get(self, customer_id: int) -> CustomerMapper:
+        instance = self.session.query(CustomerModel).filter_by(id=customer_id).first()
+        return self._model_to_mapper(instance) if instance else None
 
     def get_by_email(self, email: str) -> CustomerMapper:
         instance = self.session.query(CustomerModel).filter_by(email=email).first()

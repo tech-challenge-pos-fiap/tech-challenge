@@ -1,4 +1,4 @@
-from app.adapters.gateways.mappers.customer_mapper import CustomerMapper
+from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.adapters.gateways.repositories.customer_repository_port import CustomerRepositoryPort
 from app.application.ports.customers.customer_repository_gateway import CustomerRepositoryGatewayPort
 from app.domain.entities.customer import Customer
@@ -13,11 +13,13 @@ class CustomerRepositoryGateway(CustomerRepositoryGatewayPort):
         saved_customer = self.repository.save(customer_mapper)
         return saved_customer.to_entity()
 
+    def get(self, customer_id: int):
+        customer_mapper = self.repository.get(customer_id)
+        return customer_mapper.to_entity() if customer_mapper else None
+
     def get_by_email(self, email):
         customer_mapper = self.repository.get_by_email(email)
-        if not customer_mapper:
-            return None
-        return customer_mapper.to_entity()
+        return customer_mapper.to_entity() if customer_mapper else None
 
     def get_by_cpf(self, cpf):
         customer_mapper = self.repository.get_by_cpf(cpf)
