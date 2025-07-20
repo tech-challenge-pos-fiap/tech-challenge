@@ -1,0 +1,90 @@
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from app.adapters.controllers.payments.get_payment_by_id_controller import GetPaymentByIdController
+from app.adapters.controllers.payments.get_payments_by_order_id_controller import GetPaymentsByOrderIdController
+from app.adapters.controllers.payments.process_payment_controller import ProcessPaymentController
+from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
+from app.adapters.gateways.payment_repository_gateway import PaymentRepositoryGateway
+from app.adapters.gateways.payment_service_gateway import PaymentServiceGateway
+from app.adapters.presenters.payment_presenter import PaymentPresenter
+from app.application.use_cases.payments.get_payment_by_id import GetPaymentByIdUseCase
+from app.application.use_cases.payments.get_payments_by_order_id import GetPaymentsByOrderIdUseCase
+from app.application.use_cases.payments.process_payment import ProcessPaymentUseCase
+from app.config.database import get_database_session
+from app.infrastructure.dependencies.order_dependencies import get_order_repository_gateway
+from app.infrastructure.external.external_payment_service import ExternalPaymentProcessService
+from app.infrastructure.persistence.repositories.payment_repository import PaymentRepository
+
+
+def get_payment_repository(session: Session = Depends(get_database_session)) -> PaymentRepository:
+    return PaymentRepository(session)
+
+
+def get_process_payment_service() -> ExternalPaymentProcessService:
+    return ExternalPaymentProcessService()
+
+
+def get_payment_repository_gateway(
+    repository: PaymentRepository = Depends(get_payment_repository),
+) -> PaymentRepositoryGateway:
+    return PaymentRepositoryGateway(repository)
+
+
+def get_payment_service_gateway(
+    payment_service: PaymentServiceGateway = Depends(get_process_payment_service),
+) -> PaymentServiceGateway:
+    return PaymentServiceGateway(payment_service)
+
+
+def get_process_payment_use_case(
+    payment_repository_gateway: PaymentRepositoryGateway = Depends(get_payment_repository_gateway),
+    payment_service_gateway: PaymentServiceGateway = Depends(get_payment_service_gateway),
+    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
+) -> ProcessPaymentUseCase:
+    return ProcessPaymentUseCase(
+        payment_repository=payment_repository_gateway,
+        payment_service=payment_service_gateway,
+        order_repository=order_repository_gateway,
+    )
+
+
+def get_get_payment_by_id_use_case(
+    payment_repository_gateway: PaymentRepositoryGateway = Depends(get_payment_repository_gateway),
+) -> GetPaymentByIdUseCase:
+    return GetPaymentByIdUseCase(payment_repository=payment_repository_gateway)
+
+
+def get_get_payments_by_order_id_use_case(
+    payment_repository_gateway: PaymentRepositoryGateway = Depends(get_payment_repository_gateway),
+) -> GetPaymentsByOrderIdUseCase:
+    return GetPaymentsByOrderIdUseCase(payment_repository=payment_repository_gateway)
+
+
+def get_get_payment_by_id_controller(
+    get_payment_by_id_use_case: GetPaymentByIdUseCase = Depends(get_get_payment_by_id_use_case),
+) -> GetPaymentByIdController:
+    presenter = PaymentPresenter()
+    return GetPaymentByIdController(
+        use_case=get_payment_by_id_use_case,
+        presenter=presenter,
+    )
+
+def get_get_payments_by_order_id_controller(
+    get_payments_by_order_id_use_case: GetPaymentsByOrderIdUseCase = Depends(get_get_payments_by_order_id_use_case),
+) -> GetPaymentsByOrderIdController:
+    presenter = PaymentPresenter()
+    return GetPaymentsByOrderIdController(
+        use_case=get_payments_by_order_id_use_case,
+        presenter=presenter,
+    )
+
+
+def get_process_payment_controller(
+    process_payment_use_case: ProcessPaymentUseCase = Depends(get_process_payment_use_case),
+) -> ProcessPaymentController:
+    presenter = PaymentPresenter()
+    return ProcessPaymentController(
+        use_case=process_payment_use_case,
+        presenter=presenter,
+    )

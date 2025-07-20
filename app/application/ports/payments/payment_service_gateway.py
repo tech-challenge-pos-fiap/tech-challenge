@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+
+from app.domain.entities.payment import Payment
 
 
 class PaymentServiceGatewayPort(ABC):
     @abstractmethod
-    def create_pix_payment(self, payment_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Cria um pagamento PIX"""
+    def process_payment(self, payment: Payment) -> bool:
+        """Process the payment and return the result."""
         pass
