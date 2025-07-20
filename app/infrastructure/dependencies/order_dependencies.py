@@ -4,12 +4,16 @@ from sqlalchemy.orm import Session
 from app.adapters.controllers.orders.create_order_controller import CreateOrderController
 from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrdersController
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
+from app.adapters.gateways.customer_repository_gateway import CustomerRepositoryGateway
 from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
+from app.adapters.gateways.product_repository_gateway import ProductRepositoryGateway
 from app.adapters.presenters.order_presenter import OrderPresenter
 from app.application.use_cases.orders.create_order import CreateOrderUseCase
 from app.application.use_cases.orders.get_all_orders import GetAllOrdersUseCase
 from app.application.use_cases.orders.get_order_by_id import GetOrderByIdUseCase
 from app.config.database import get_database_session
+from app.infrastructure.dependencies.customer_dependencies import get_customer_repository_gateway
+from app.infrastructure.dependencies.product_dependencies import get_product_repository_gateway
 from app.infrastructure.persistence.repositories.order_repository import OrderRepository
 
 
@@ -31,8 +35,14 @@ def get_get_all_orders_use_case(
 
 def get_create_order_use_case(
     order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
+    product_repository_gateway: ProductRepositoryGateway = Depends(get_product_repository_gateway),
+    customer_repository_gateway: CustomerRepositoryGateway = Depends(get_customer_repository_gateway),
 ) -> CreateOrderUseCase:
-    return CreateOrderUseCase(order_repository_gateway)
+    return CreateOrderUseCase(
+        order_repository=order_repository_gateway,
+        product_repository=product_repository_gateway,
+        customer_repository=customer_repository_gateway,
+    )
 
 
 def get_get_order_by_id_use_case(

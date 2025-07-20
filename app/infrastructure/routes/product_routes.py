@@ -32,7 +32,7 @@ def create_product(
     product: CreateProductSchema,
     controller: CreateProductController = Depends(get_create_product_controller)
 ):
-    return controller.execute(product)
+    return controller.execute(product.model_dump())
 
 
 @router.put("/{product_id}", response_model=ProductResponseSchema)

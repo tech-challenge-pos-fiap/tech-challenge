@@ -1,12 +1,10 @@
-import enum
-
-from sqlalchemy import Column, Enum, Float, Integer, String
-from sqlalchemy.orm import relationship
-
-from .base import TimestampMixin
+from enum import Enum
+from sqlalchemy import String, Float, Enum as SqlEnum
+from sqlalchemy.orm import Mapped, mapped_column
+from app.infrastructure.persistence.models.base import TimestampMixin
 
 
-class ProductCategory(str, enum.Enum):
+class ProductCategory(str, Enum):
     BURGUERS = 'burguers'
     DRINKS = 'drinks'
     APPETIZERS = 'appetizers'
@@ -14,16 +12,17 @@ class ProductCategory(str, enum.Enum):
 
 
 class ProductModel(TimestampMixin):
-    __tablename__ = 'product'
+    __tablename__ = 'products'
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    description = Column(String, nullable=False)
-    price = Column(Float, nullable=False)
-    orders = relationship(
-        "OrderModel",
-        secondary='product_order',
-        back_populates="products",
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
+    description: Mapped[str] = mapped_column(String(255), nullable=True)
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+    image_path: Mapped[str] = mapped_column(String(255), nullable=True)
+    category: Mapped[ProductCategory] = mapped_column(
+        SqlEnum(
+            ProductCategory, name="productcategory", native_enum=True,
+            values_callable=lambda x: [e.value for e in ProductCategory]
+        ),
+        nullable=False
     )
-    category = Column(Enum(ProductCategory, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
-    image_path = Column(String(255), nullable=True)
