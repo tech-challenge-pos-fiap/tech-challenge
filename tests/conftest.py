@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
-from app.infrastructure.persistence.models.base import Base
 from app.config.database import get_database_session
+from app.infrastructure.persistence.models.base import Base
 from main import app
 
 DATABASE_URL = "sqlite:///./tests/test.db"

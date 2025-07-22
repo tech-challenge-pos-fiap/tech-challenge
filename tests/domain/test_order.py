@@ -1,9 +1,11 @@
 # tests/domain/test_order.py
-import pytest
 from decimal import Decimal
+
+import pytest
+
+from app.domain.entities.customer import Customer
 from app.domain.entities.order import Order, OrderItem, OrderStatus
 from app.domain.entities.product import Product
-from app.domain.entities.customer import Customer
 
 
 @pytest.fixture

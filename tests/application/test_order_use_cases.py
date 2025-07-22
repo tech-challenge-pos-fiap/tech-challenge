@@ -1,9 +1,11 @@
 # pylint: disable=redefined-outer-name
-import pytest
 from decimal import Decimal
+
+import pytest
+
 from app.application.use_cases.orders.create_order import CreateOrderUseCase
-from app.domain.entities.product import Product
 from app.domain.entities.customer import Customer
+from app.domain.entities.product import Product
 
 
 @pytest.fixture
