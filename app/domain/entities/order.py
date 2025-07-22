@@ -29,8 +29,25 @@ class Order:
 
     @classmethod
     def create(cls, items: list[OrderItem], customer: Optional[Customer] = None) -> 'Order':
-        if not items:
+        """
+        Create a new order with the specified items and optional customer.
+
+        Args:
+            items (list[OrderItem]): A list of order items to include in the order.
+            customer (Optional[Customer]): An optional customer associated with the order.
+
+        Returns:
+            Order: The created order instance.
+
+        Raises:
+            ValueError: If the order has no items or if any item has a quantity less than or equal to zero.
+        """
+        if len(items) == 0:
             raise ValueError("Order must have at least one item.")
+
+        if any(item.quantity <= 0 for item in items):
+            raise ValueError("All items must have a quantity greater than zero.")
+
         total_price = sum(item.quantity * item.product.price for item in items)
 
         return cls(
