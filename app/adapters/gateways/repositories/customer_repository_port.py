@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.adapters.gateways.mappers.customer_mapper import CustomerMapper
+from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 
 
 class CustomerRepositoryPort(ABC):

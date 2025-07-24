@@ -11,6 +11,11 @@ class ProductRepositoryGatewayPort(ABC):
         pass
 
     @abstractmethod
+    def filter(self, **kwargs) -> List[Product]:
+        """Filter products based on various attributes."""
+        pass
+
+    @abstractmethod
     def save(self, product: Product) -> Product:
         """Persist a product and return it (possibly with ID populated)."""
         pass

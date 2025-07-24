@@ -19,7 +19,7 @@ if not database_exists(engine.url):
 Base.metadata.create_all(bind=engine)
 
 
-def override_get_db():
+def override_get_database_session():
     db = TestingSessionLocal()
     try:
         yield db
@@ -27,7 +27,7 @@ def override_get_db():
         db.close()
 
 
-app.dependency_overrides[get_database_session] = override_get_db
+app.dependency_overrides[get_database_session] = override_get_database_session
 
 
 @pytest.fixture

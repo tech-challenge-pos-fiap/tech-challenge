@@ -7,6 +7,6 @@ class CreateProductController:
         self.use_case = use_case
         self.presenter = presenter
 
-    def execute(self, product_data):
+    def execute(self, product_data: dict):
         product = self.use_case.execute(product_data)
         return self.presenter.present(product)

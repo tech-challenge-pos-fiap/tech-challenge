@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.gateways.mappers.order_mapper import OrderMapper
+from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
+from app.adapters.gateways.repositories.mappers.order_mapper import OrderItemMapper, OrderMapper
+from app.adapters.gateways.repositories.mappers.product_mapper import ProductMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
-from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
-from app.infrastructure.persistence.models.order import OrderModel
+from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel
 
 
 class OrderRepository(OrderRepositoryPort):
@@ -12,22 +13,40 @@ class OrderRepository(OrderRepositoryPort):
 
     def _mapper_to_model(self, order: OrderMapper) -> OrderModel:
         return OrderModel(
-            id=order.id,
-            products=order.products,
+            customer_id=order.customer.id if order.customer else None,
             status=order.status,
             total_price=order.total_price,
-            customer_id=order.customer_id,
+            items=[
+                OrderItemModel(
+                    product_id=item.product.id,
+                    quantity=item.quantity
+                ) for item in order.items
+            ]
         )
+
 
     def _model_to_mapper(self, instance: OrderModel) -> OrderMapper:
         return OrderMapper(
             id=instance.id,
-            products=instance.products,
+            items=[OrderItemMapper(
+                product=ProductMapper(
+                    id=item.product.id,
+                    name=item.product.name,
+                    description=item.product.description,
+                    price=item.product.price,
+                    category=item.product.category,
+                    image_path=item.product.image_path
+                ),
+                quantity=item.quantity
+            ) for item in instance.items],
             status=instance.status,
             total_price=instance.total_price,
-            customer_id=instance.customer_id,
-            created_at=instance.created_at,
-            updated_at=instance.updated_at
+            customer=CustomerMapper(
+                id=instance.customer.id,
+                name=instance.customer.name,
+                email=instance.customer.email,
+                cpf=instance.customer.cpf,
+            ) if instance.customer else None,
         )
 
     def save(self, order: OrderMapper) -> OrderMapper:
