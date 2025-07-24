@@ -13,6 +13,11 @@ class CustomerRepositoryGatewayPort(ABC):
         pass
 
     @abstractmethod
+    def get(self, customer_id: int) -> Optional[Customer]:
+        """Return a customer by ID or None if not found."""
+        pass
+
+    @abstractmethod
     def get_by_email(self, email: str) -> Optional[Customer]:
         """Return a customer by email or None if not found."""
         pass

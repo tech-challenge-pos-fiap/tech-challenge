@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.gateways.mappers.product_mapper import ProductMapper
+from app.adapters.gateways.repositories.mappers.product_mapper import ProductMapper
 from app.adapters.gateways.repositories.product_repository_port import ProductRepositoryPort
 from app.infrastructure.persistence.models.product import ProductModel
 
@@ -38,6 +38,28 @@ class ProductRepository(ProductRepositoryPort):
 
     def list_by_category(self, category: str, skip: int = 0, limit: int = 10) -> list[ProductMapper]:
         instances = self.session.query(ProductModel).filter_by(category=category).offset(skip).limit(limit).all()
+        return [self._model_to_mapper(instance) for instance in instances]
+
+    def filter(self, **kwargs) -> list[ProductMapper]:
+        if not kwargs:
+            instances = self.session.query(ProductModel).all()
+            return [self._model_to_mapper(instance) for instance in instances]
+
+        valid_types = (str, int, float, list, type(None))
+        if not all(isinstance(v, valid_types) for v in kwargs.values()):
+            raise ValueError("All filter values must be str, int, float, or list.")
+
+        valid_keys = set(ProductModel.__table__.columns.keys())
+        if not all(key in valid_keys for key in kwargs):
+            raise ValueError("Invalid filter keys provided.")
+
+        singular_kwargs = {k: v for k, v in kwargs.items() if not isinstance(v, list)}
+        list_kwargs = {k: v for k, v in kwargs.items() if isinstance(v, list)}
+
+        instances = self.session.query(ProductModel).filter_by(**singular_kwargs)
+        for key, value in list_kwargs.items():
+            instances = instances.filter(getattr(ProductModel, key).in_(value))
+
         return [self._model_to_mapper(instance) for instance in instances]
 
     def update(self, product_id: int, product: ProductMapper) -> ProductMapper:

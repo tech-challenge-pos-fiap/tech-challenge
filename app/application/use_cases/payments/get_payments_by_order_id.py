@@ -2,7 +2,7 @@ from app.application.ports.payments.payment_repository_gateway import PaymentRep
 from app.domain.entities.payment import Payment
 
 
-class GetPaymentsByOrderUseCase:
+class GetPaymentsByOrderIdUseCase:
     def __init__(self, payment_repository: PaymentRepositoryGatewayPort):
         self.payment_repository = payment_repository
 

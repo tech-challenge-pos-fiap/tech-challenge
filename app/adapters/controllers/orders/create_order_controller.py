@@ -7,6 +7,6 @@ class CreateOrderController:
         self.use_case = use_case
         self.presenter = presenter
 
-    def execute(self, order_data):
+    def execute(self, order_data: dict) -> dict:
         order = self.use_case.execute(order_data)
         return self.presenter.present(order)
