@@ -48,14 +48,14 @@ def get_order_by_id(
 ):
     return controller.execute(order_id)
 
-@router.post("/checkout", response_model=OrderResponseSchema)
+@router.post("/checkout", response_model=OrderSchema)
 def checkout_order(
     order: CreateOrderRequestSchema,
     use_case: CheckoutOrder = Depends(get_checkout_order_use_case)
 ):
     return create_checkout_order_endpoint(order, use_case)
 
-@router.put("/{order_id}/status", response_model=OrderResponseSchema)
+@router.put("/{order_id}/status", response_model=OrderSchema)
 def update_order_status(
     order_id: int,
     dto: UpdateOrderStatusDTO,
