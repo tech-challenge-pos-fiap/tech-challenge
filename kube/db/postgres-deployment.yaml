@@ -14,20 +14,16 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:14-alpine
-          env:
-            - name: POSTGRES_USER
-              value: tech-challenge
-            - name: POSTGRES_PASSWORD
-              value: tech-challenge
-            - name: POSTGRES_DB
-              value: tech-challenge
+          image: postgres:15
           ports:
             - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: postgres-secret
           volumeMounts:
-            - name: postgres-storage
+            - name: pgdata
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: postgres-storage
+        - name: pgdata
           persistentVolumeClaim:
             claimName: postgres-pvc

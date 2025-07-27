@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api-container
+          image: psilva009/tech-challenge-api
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+      initContainers:
+        - name: alembic-migrations
+          image: psilva009/tech-challenge-api
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - secretRef:
+                name: app-secret

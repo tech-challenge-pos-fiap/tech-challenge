@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: tech-config
-data:
-  DATABASE_URL: postgresql://tech-challenge:tech-challenge@postgres:5432/tech-challenge
-  MP_PAYMENT_URL: https://api.mercadopago.com/v1/payments
