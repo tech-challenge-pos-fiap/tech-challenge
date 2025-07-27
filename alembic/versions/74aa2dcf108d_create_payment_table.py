@@ -1,7 +1,7 @@
 """create_payment_table
 
 Revision ID: 74aa2dcf108d
-Revises: 969f5c395501
+Revises: 69348525435a
 Create Date: 2025-05-26 01:51:49.105112
 
 """
@@ -14,7 +14,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = '74aa2dcf108d'
-down_revision: Union[str, None] = '969f5c395501'
+down_revision: Union[str, None] = '69348525435a'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

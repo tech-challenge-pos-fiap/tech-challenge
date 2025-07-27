@@ -7,18 +7,18 @@ from app.adapters.persistence.repositories.customer_repository import CustomerRe
 from app.adapters.persistence.repositories.order_repository import OrderRepository
 from app.adapters.persistence.repositories.payment_repository import PaymentRepository
 from app.adapters.persistence.repositories.product_repository import ProductRepository
-from app.application.services.create_payment_service import CreatePixPaymentService
-from app.application.services.create_products_service import CreateProductsService
-from app.application.services.delete_products import DeleteProductsService
-from app.application.services.identify_customer_service import IdentifyCustomerService
-from app.application.services.list_payment_service import ListPaymentService
-from app.application.services.list_products_service import ListProductsService
+from app.application.services.customers.identify_customer_service import IdentifyCustomerService
+from app.application.services.customers.sign_up_customer_service import SignUpCustomerService
 from app.application.services.orders.create_order_service import CreateOrderService
 from app.application.services.orders.get_all_order_service import GetAllOrderService
 from app.application.services.orders.get_order_service import GetOrderService
 from app.application.services.orders.update_order_service import UpdateOrderService
-from app.application.services.sign_up_customer_service import SignUpCustomerService
-from app.application.services.update_products_service import UpdateProductsService
+from app.application.services.payments.create_payment_service import CreatePixPaymentService
+from app.application.services.payments.list_payment_service import ListPaymentService
+from app.application.services.products.create_products_service import CreateProductsService
+from app.application.services.products.delete_products import DeleteProductsService
+from app.application.services.products.list_products_service import ListProductsService
+from app.application.services.products.update_products_service import UpdateProductsService
 from app.config.db import get_db
 
 
@@ -26,26 +26,21 @@ def get_sign_up_service(db: Session = Depends(get_db)) -> SignUpCustomerService:
     repository = CustomerRepository(db)
     return SignUpCustomerService(repository)
 
-
 def get_identify_by_cpf_service(db: Session = Depends(get_db)) -> IdentifyCustomerService:
     repository = CustomerRepository(db)
     return IdentifyCustomerService(repository)
-
 
 def get_list_products_service(db: Session = Depends(get_db)) -> ListProductsService:
     repository = ProductRepository(db)
     return ListProductsService(repository)
 
-
 def get_create_products_service(db: Session = Depends(get_db)) -> CreateProductsService:
     repository = ProductRepository(db)
     return CreateProductsService(repository)
 
-
 def get_update_products_service(db: Session = Depends(get_db)) -> UpdateProductsService:
     repository = ProductRepository(db)
     return UpdateProductsService(repository)
-
 
 def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProductsService:
     repository = ProductRepository(db)
@@ -53,12 +48,18 @@ def get_delete_products_service(db: Session = Depends(get_db)) -> DeleteProducts
 
 def get_create_payment_service(db: Session = Depends(get_db)) -> CreatePixPaymentService:
     client = MercadoPagoPixClient()
-    adapter = MercadoPagoPaymentService(client, db)
-    return CreatePixPaymentService(adapter)
+    payment_adapter = MercadoPagoPaymentService(client, db)
+    order_repository = OrderRepository(db)
+    return CreatePixPaymentService(payment_adapter, order_repository)
 
-def get_list_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
+def get_get_payment_service(db: Session = Depends(get_db)) -> ListPaymentService:
     repository = PaymentRepository(db)
     return ListPaymentService(repository)
+
+def get_get_payment_service_by_order_id(db: Session = Depends(get_db)) -> ListPaymentService:
+    repository = PaymentRepository(db)
+    return ListPaymentService(repository)
+
 def get_create_order_service(db: Session = Depends(get_db)) -> CreateOrderService:
     repository = OrderRepository(db)
     return CreateOrderService(repository)

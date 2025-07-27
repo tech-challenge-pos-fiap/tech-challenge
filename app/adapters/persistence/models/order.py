@@ -32,3 +32,4 @@ class OrderModel(TimestampMixin):
     total_price = Column(Float, nullable=False)
     customer_id = Column(Integer, ForeignKey('customers.id'), nullable=True)
     customer: Mapped[Optional["CustomerModel"]] = relationship("CustomerModel", back_populates="orders")
+    payments = relationship("Payment", back_populates="order")

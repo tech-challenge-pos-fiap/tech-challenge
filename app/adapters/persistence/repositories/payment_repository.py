@@ -26,3 +26,15 @@ class PaymentRepository:
         payment.status = PaymentStatus.APPROVED
         payment.paid_at = datetime.now()
         return payment
+
+    def get_payment_by_order_id(self, order_id: int) -> list[Payment]:
+        """
+            Busca os pagamentos pelo order_id (retornando uma lista) e atualiza os campos “status” e “paid_at”
+        """
+        payments = self.db.query(Payment).filter(Payment.order_id == order_id).all()
+        if not payments:
+            raise NoResultFound(f"Order {order_id} não possui pagamentos.")
+        for payment in payments:
+            payment.status = PaymentStatus.APPROVED
+            payment.paid_at = datetime.now()
+        return payments

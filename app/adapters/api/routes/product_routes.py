@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.adapters.api.dtos.product_dto import Product, ProductResponse
 from app.adapters.api.dtos.response_dto import ResponseModel
-from app.application.services.create_products_service import CreateProductsService
-from app.application.services.delete_products import DeleteProductsService
-from app.application.services.list_products_service import ListProductsService
-from app.application.services.update_products_service import UpdateProductsService
+from app.application.services.products.create_products_service import CreateProductsService
+from app.application.services.products.delete_products import DeleteProductsService
+from app.application.services.products.list_products_service import ListProductsService
+from app.application.services.products.update_products_service import UpdateProductsService
 from app.config.dependencies import (
     get_create_products_service,
     get_delete_products_service,

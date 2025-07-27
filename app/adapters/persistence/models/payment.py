@@ -1,4 +1,4 @@
-from sqlalchemy import JSON, Column, DateTime, Enum, Integer, Numeric
+from sqlalchemy import JSON, Column, DateTime, Enum, ForeignKey, Integer, Numeric
 from sqlalchemy.orm import relationship
 
 from app.domain.models.payment import PaymentMethod, PaymentStatus
@@ -15,4 +15,5 @@ class Payment(TimestampMixin):
     amount = Column(Numeric(10, 2), nullable=False)
     paid_at = Column(DateTime, nullable=True)
     mp_response = Column(JSON, nullable=True)
-    # order = relationship("Order", back_populates="payments")  # Será adicionado depois
+    order_id = Column(Integer, ForeignKey('orders.id'), nullable=True)
+    order = relationship("OrderModel", back_populates="payments")
