@@ -1,8 +1,8 @@
-"""update_order_and_payment_models
+"""update_order_and_payment_tables
 
-Revision ID: 2b48dd3c6290
+Revision ID: d67c5d6696d1
 Revises: bb2e8d0615cc
-Create Date: 2025-07-31 11:29:14.984572
+Create Date: 2025-07-31 12:03:46.089483
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '2b48dd3c6290'
+revision: str = 'd67c5d6696d1'
 down_revision: Union[str, None] = 'bb2e8d0615cc'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,7 +33,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_order_items_id'), 'order_items', ['id'], unique=False)
     op.drop_table('product_order')
     op.add_column('payments', sa.Column('transaction_amount', sa.Numeric(precision=10, scale=2), nullable=False))
-    op.add_column('payments', sa.Column('payment_method', sa.Enum('PIX', 'CREDIT_CARD', 'BOLETO', name='paymentmethod'), nullable=False))
+    op.add_column('payments', sa.Column('payment_method', sa.Enum('pix', 'credit_card', 'boleto', name='paymentmethod'), nullable=False))
     op.add_column('payments', sa.Column('description', sa.String(length=255), nullable=True))
     op.drop_column('payments', 'amount')
     op.drop_column('payments', 'method')

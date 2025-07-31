@@ -36,8 +36,15 @@ class OrderModel(TimestampMixin):
     items: Mapped[List["OrderItemModel"]] = relationship(
         OrderItemModel, back_populates="order", cascade="all, delete-orphan",
     )
-    status: Mapped[str] = mapped_column(SqlEnum(OrderStatus), nullable=False, default="pending",
-        values_callable=lambda x: [e.value for e in OrderStatus]
+    status: Mapped[str] = mapped_column(
+        SqlEnum(
+            OrderStatus,
+            name="orderstatus",
+            native_enum=True,
+            values_callable=lambda x: [e.value for e in OrderStatus]
+        ),
+        nullable=False,
+        default="pending"
     )
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
     customer_id: Mapped[Optional[int]] = mapped_column(ForeignKey("customers.id"), nullable=True)
