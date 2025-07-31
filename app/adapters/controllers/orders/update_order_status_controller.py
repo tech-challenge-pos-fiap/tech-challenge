@@ -1,13 +1,10 @@
-from fastapi import Depends
-
-from app.adapters.controllers.dtos.order_dtos import UpdateOrderStatusDTO
 from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
-from app.infrastructure.dependencies.order_dependencies import get_update_order_status_use_case
+from app.domain.dtos.update_order_status_dto import UpdateOrderStatusDTO
+from app.domain.models.order import Order
 
-
-def update_status_endpoint(
+def update_order_status_controller(
     order_id: int,
     dto: UpdateOrderStatusDTO,
-    use_case: UpdateOrderStatus = Depends(get_update_order_status_use_case)
-):
+    use_case: UpdateOrderStatus,
+) -> Order:
     return use_case.execute(order_id, dto.status)

@@ -4,12 +4,8 @@ from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerM
 from app.adapters.gateways.repositories.mappers.order_mapper import OrderItemMapper, OrderMapper
 from app.adapters.gateways.repositories.mappers.product_mapper import ProductMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
-<<<<<<< HEAD
 from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
-from app.infrastructure.persistence.models.order import OrderModel
-=======
 from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel
->>>>>>> 7f1f3754f6287f6d0df6ffc84bf26611f552e157
 
 
 class OrderRepository(OrderRepositoryPort):
@@ -79,7 +75,21 @@ class OrderRepository(OrderRepositoryPort):
         return self._model_to_mapper(order_model)
 
     def get_all(self, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
-        order_models = self.session.query(OrderModel).offset(skip).limit(limit).all()
+        status_order = case(
+            (OrderModel.status == 'READY', 1),
+            (OrderModel.status == 'IN_PREPARATION', 2),
+            (OrderModel.status == 'RECEIVED', 3),
+            else_=4
+        )
+
+        query = (
+            self.session.query(OrderModel)
+            .filter(OrderModel.status != 'FINISHED')
+            .order_by(status_order, OrderModel.created_at.asc())
+            .offset(skip)
+            .limit(limit)
+        )
+        order_models = query.all()
         return [self._model_to_mapper(order_model) for order_model in order_models]
 
     def delete(self, order_id: str) -> bool:
