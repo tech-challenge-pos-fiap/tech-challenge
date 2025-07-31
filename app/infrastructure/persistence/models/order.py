@@ -11,7 +11,7 @@ from app.infrastructure.persistence.models.product import ProductModel
 from .base import Base, TimestampMixin
 
 
-<<<<<<< HEAD
+
 class OrderStatus(enum.Enum):
     PENDING = 'pending'
     DELIVERED = 'delivered'
@@ -20,11 +20,6 @@ class OrderStatus(enum.Enum):
     IN_PREPARATION = 'in_preparation'
     READY = 'ready'
     FINISHED = 'finished'
-=======
-class OrderStatus(str, Enum):
-    PENDING = "pending"
-    DELIVERED = "delivered"
-    CANCELED = "canceled"
 
 
 class OrderItemModel(Base):
@@ -37,7 +32,7 @@ class OrderItemModel(Base):
 
     order: Mapped["OrderModel"] = relationship("OrderModel", back_populates="items")
     product: Mapped["ProductModel"] = relationship("ProductModel")
->>>>>>> 7f1f3754f6287f6d0df6ffc84bf26611f552e157
+
 
 
 class OrderModel(TimestampMixin):

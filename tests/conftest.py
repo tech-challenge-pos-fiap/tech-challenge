@@ -27,11 +27,9 @@ def override_get_database_session():
         db.close()
 
 
-<<<<<<< HEAD
 app.dependency_overrides[get_database_session] = override_get_db
-=======
 app.dependency_overrides[get_database_session] = override_get_database_session
->>>>>>> 7f1f3754f6287f6d0df6ffc84bf26611f552e157
+app.dependency_overrides[get_database_session] = override_get_database_session
 
 
 @pytest.fixture

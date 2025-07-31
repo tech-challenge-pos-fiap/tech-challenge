@@ -1,16 +1,15 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
-
 from app.adapters.controllers.orders.create_order_controller import CreateOrderController
 from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrdersController
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
-<<<<<<< HEAD
 from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway, OrderRepositoryGatewayPort
-=======
 from app.adapters.gateways.customer_repository_gateway import CustomerRepositoryGateway
 from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
 from app.adapters.gateways.product_repository_gateway import ProductRepositoryGateway
->>>>>>> 7f1f3754f6287f6d0df6ffc84bf26611f552e157
+from app.adapters.gateways.customer_repository_gateway import CustomerRepositoryGateway
+from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
+from app.adapters.gateways.product_repository_gateway import ProductRepositoryGateway
 from app.adapters.presenters.order_presenter import OrderPresenter
 from app.application.use_cases.orders.checkout_order import CheckoutOrder
 from app.application.use_cases.orders.create_order import CreateOrderUseCase
