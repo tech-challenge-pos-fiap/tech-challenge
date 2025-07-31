@@ -13,14 +13,14 @@ class ProductMapper:
     image_path: str
 
     @classmethod
-    def from_entity(cls, product: Product) -> 'ProductMapper':
+    def from_entity(cls, product: Product) -> "ProductMapper":
         return cls(
             id=product.id,
             name=product.name,
             description=product.description,
             price=product.price,
             category=product.category,
-            image_path=product.image_path
+            image_path=product.image_path,
         )
 
     def to_entity(self) -> Product:
@@ -30,5 +30,5 @@ class ProductMapper:
             description=self.description,
             price=self.price,
             category=self.category,
-            image_path=self.image_path
+            image_path=self.image_path,
         )

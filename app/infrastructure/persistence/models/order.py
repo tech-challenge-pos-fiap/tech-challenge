@@ -18,11 +18,11 @@ class OrderStatus(str, Enum):
 
 
 class OrderItemModel(Base):
-    __tablename__ = 'order_items'
+    __tablename__ = "order_items"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
-    order_id: Mapped[int] = mapped_column(ForeignKey('orders.id'))
-    product_id: Mapped[int] = mapped_column(ForeignKey('products.id'))
+    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"))
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
     order: Mapped["OrderModel"] = relationship("OrderModel", back_populates="items")
@@ -30,21 +30,20 @@ class OrderItemModel(Base):
 
 
 class OrderModel(TimestampMixin):
-    __tablename__ = 'orders'
+    __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     items: Mapped[List["OrderItemModel"]] = relationship(
-        OrderItemModel, back_populates="order", cascade="all, delete-orphan",
+        OrderItemModel,
+        back_populates="order",
+        cascade="all, delete-orphan",
     )
     status: Mapped[str] = mapped_column(
         SqlEnum(
-            OrderStatus,
-            name="orderstatus",
-            native_enum=True,
-            values_callable=lambda x: [e.value for e in OrderStatus]
+            OrderStatus, name="orderstatus", native_enum=True, values_callable=lambda x: [e.value for e in OrderStatus]
         ),
         nullable=False,
-        default="pending"
+        default="pending",
     )
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
     customer_id: Mapped[Optional[int]] = mapped_column(ForeignKey("customers.id"), nullable=True)

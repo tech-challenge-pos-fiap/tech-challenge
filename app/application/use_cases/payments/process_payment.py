@@ -46,7 +46,7 @@ class ProcessPaymentUseCase:
         if order.total_price != payment_data["transaction_amount"]:
             raise ValueError(
                 f"""
-                Payment amount {payment_data['transaction_amount']}
+                Payment amount {payment_data["transaction_amount"]}
                 does not match order total price {order.total_price}.
                 """
             )

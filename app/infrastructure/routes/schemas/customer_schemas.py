@@ -9,7 +9,7 @@ class CustomerSignUpRequestSchema(BaseModel):
 
 
 class CustomerIdentifyByCPFRequestSchema(BaseModel):
-    cpf: Annotated[str, StringConstraints(pattern=r'^\d{11}$')]
+    cpf: Annotated[str, StringConstraints(pattern=r"^\d{11}$")]
 
 
 class CustomerResponseSchema(BaseModel):

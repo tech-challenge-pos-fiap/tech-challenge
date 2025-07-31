@@ -3,8 +3,8 @@ import re
 
 class CPF:
     def __init__(self, value: str):
-        cleaned = re.sub(r'\D', '', value)
-        if not re.match(r'^\d{11}$', cleaned):
+        cleaned = re.sub(r"\D", "", value)
+        if not re.match(r"^\d{11}$", cleaned):
             raise ValueError("Invalid CPF format")
         self.value = cleaned
 

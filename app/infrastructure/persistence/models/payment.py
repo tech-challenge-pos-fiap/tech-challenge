@@ -20,7 +20,7 @@ class PaymentModel(TimestampMixin):
             PaymentMethod,
             name="paymentmethod",
             native_enum=True,
-            values_callable=lambda x: [e.value for e in PaymentMethod]
+            values_callable=lambda x: [e.value for e in PaymentMethod],
         ),
         nullable=False,
     )
@@ -29,7 +29,7 @@ class PaymentModel(TimestampMixin):
             PaymentStatus,
             name="paymentstatus",
             native_enum=True,
-            values_callable=lambda x: [e.value for e in PaymentStatus]
+            values_callable=lambda x: [e.value for e in PaymentStatus],
         ),
         default=PaymentStatus.PENDING,
         nullable=False,
@@ -38,5 +38,5 @@ class PaymentModel(TimestampMixin):
     paid_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     mp_response: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
 
-    order_id: Mapped[Optional[int]] = mapped_column(ForeignKey('orders.id'), nullable=True)
+    order_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orders.id"), nullable=True)
     order: Mapped["OrderModel"] = relationship("OrderModel", back_populates="payments")

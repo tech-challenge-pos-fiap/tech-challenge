@@ -8,7 +8,7 @@ class ProductRepositoryGateway(ProductRepositoryGatewayPort):
     def __init__(self, repository: ProductRepositoryPort):
         self.repository = repository
 
-    def list_by_category(self, category, skip = 0, limit = 10) -> list[Product]:
+    def list_by_category(self, category, skip=0, limit=10) -> list[Product]:
         product_mappers = self.repository.list_by_category(category, skip, limit)
         return [product_mapper.to_entity() for product_mapper in product_mappers]
 

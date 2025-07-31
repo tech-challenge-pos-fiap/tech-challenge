@@ -8,10 +8,10 @@ class CreateProductUseCase:
 
     def execute(self, product_data: dict) -> Product:
         product = Product(
-            name=product_data.get('name'),
-            description=product_data.get('description'),
-            price=product_data.get('price'),
-            category=product_data.get('category'),
-            image_path=product_data.get('image_path'),
+            name=product_data.get("name"),
+            description=product_data.get("description"),
+            price=product_data.get("price"),
+            category=product_data.get("category"),
+            image_path=product_data.get("image_path"),
         )
         return self.repository_gateway.save(product)

@@ -21,3 +21,12 @@ up:
 rebuild:
 	docker compose down -v --remove-orphans
 	docker compose build --no-cache
+
+format:
+	docker compose run --rm $(CONTAINER) ruff format
+
+check:
+	docker compose run --rm $(CONTAINER) ruff check
+
+fix:
+	docker compose run --rm $(CONTAINER) ruff check --fix

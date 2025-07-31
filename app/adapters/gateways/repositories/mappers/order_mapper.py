@@ -13,7 +13,7 @@ class OrderItemMapper:
     quantity: int
 
     @classmethod
-    def from_entity(cls, order_item: OrderItem) -> 'OrderItemMapper':
+    def from_entity(cls, order_item: OrderItem) -> "OrderItemMapper":
         return cls(
             product=ProductMapper.from_entity(order_item.product),
             quantity=order_item.quantity,
@@ -35,7 +35,7 @@ class OrderMapper:
     id: Optional[int] = None
 
     @classmethod
-    def from_entity(cls, order: Order) -> 'OrderMapper':
+    def from_entity(cls, order: Order) -> "OrderMapper":
         return cls(
             items=[OrderItemMapper.from_entity(item) for item in order.items],
             customer=CustomerMapper.from_entity(order.customer) if order.customer else None,

@@ -4,7 +4,6 @@ from app.domain.entities.payment import Payment
 
 
 class PaymentRepositoryGatewayPort(ABC):
-
     @abstractmethod
     def save(self, payment: Payment) -> Payment:
         """Saves a payment entity."""

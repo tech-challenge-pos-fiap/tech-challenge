@@ -16,29 +16,26 @@ class OrderRepository(OrderRepositoryPort):
             customer_id=order.customer.id if order.customer else None,
             status=order.status,
             total_price=order.total_price,
-            items=[
-                OrderItemModel(
-                    product_id=item.product.id,
-                    quantity=item.quantity
-                ) for item in order.items
-            ]
+            items=[OrderItemModel(product_id=item.product.id, quantity=item.quantity) for item in order.items],
         )
-
 
     def _model_to_mapper(self, instance: OrderModel) -> OrderMapper:
         return OrderMapper(
             id=instance.id,
-            items=[OrderItemMapper(
-                product=ProductMapper(
-                    id=item.product.id,
-                    name=item.product.name,
-                    description=item.product.description,
-                    price=item.product.price,
-                    category=item.product.category,
-                    image_path=item.product.image_path
-                ),
-                quantity=item.quantity
-            ) for item in instance.items],
+            items=[
+                OrderItemMapper(
+                    product=ProductMapper(
+                        id=item.product.id,
+                        name=item.product.name,
+                        description=item.product.description,
+                        price=item.product.price,
+                        category=item.product.category,
+                        image_path=item.product.image_path,
+                    ),
+                    quantity=item.quantity,
+                )
+                for item in instance.items
+            ],
             status=instance.status,
             total_price=instance.total_price,
             customer=CustomerMapper(
@@ -46,7 +43,9 @@ class OrderRepository(OrderRepositoryPort):
                 name=instance.customer.name,
                 email=instance.customer.email,
                 cpf=instance.customer.cpf,
-            ) if instance.customer else None,
+            )
+            if instance.customer
+            else None,
         )
 
     def save(self, order: OrderMapper) -> OrderMapper:

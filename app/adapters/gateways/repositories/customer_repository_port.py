@@ -4,7 +4,6 @@ from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerM
 
 
 class CustomerRepositoryPort(ABC):
-
     @abstractmethod
     def save(self, customer: CustomerMapper) -> CustomerMapper:
         pass
