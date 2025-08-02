@@ -16,7 +16,7 @@ class ProductRepository(ProductRepositoryPort):
             description=product.description,
             price=product.price,
             category=product.category,
-            image_path=product.image_path
+            image_path=product.image_path,
         )
 
     def _model_to_mapper(self, instance: ProductMapper) -> ProductMapper:
@@ -26,7 +26,7 @@ class ProductRepository(ProductRepositoryPort):
             description=instance.description,
             price=instance.price,
             category=instance.category,
-            image_path=instance.image_path
+            image_path=instance.image_path,
         )
 
     def save(self, product: ProductMapper) -> ProductMapper:

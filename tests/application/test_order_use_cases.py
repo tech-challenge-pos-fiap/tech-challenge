@@ -39,7 +39,7 @@ def test_create_order_with_customer(use_case, mock_product_repo, mock_customer_r
         description="Juicy beef burger with cheese",
         price=Decimal("5.99"),
         category="Burgers",
-        image_path="/images/burger.jpg"
+        image_path="/images/burger.jpg",
     )
     customer = Customer(id=1, name="Bob", email="bob@fastfood.com")
 
@@ -47,10 +47,7 @@ def test_create_order_with_customer(use_case, mock_product_repo, mock_customer_r
     mock_customer_repo.get.return_value = customer
     mock_order_repo.save.side_effect = lambda order: order
 
-    order_data = {
-        "items": [{"product_id": 1, "quantity": 2}],
-        "customer_id": 1
-    }
+    order_data = {"items": [{"product_id": 1, "quantity": 2}], "customer_id": 1}
 
     order = use_case.execute(order_data)
 
@@ -68,15 +65,13 @@ def test_create_order_without_customer(use_case, mock_product_repo, mock_order_r
         description="Crispy golden fries",
         price=2.50,
         category="Sides",
-        image_path="/images/fries.jpg"
+        image_path="/images/fries.jpg",
     )
 
     mock_product_repo.filter.return_value = [fries]
     mock_order_repo.save.side_effect = lambda order: order
 
-    order_data = {
-        "items": [{"product_id": 2, "quantity": 3}]
-    }
+    order_data = {"items": [{"product_id": 2, "quantity": 3}]}
 
     order = use_case.execute(order_data)
 
@@ -89,9 +84,7 @@ def test_create_order_without_customer(use_case, mock_product_repo, mock_order_r
 def test_raises_if_product_id_is_invalid(use_case, mock_product_repo):
     mock_product_repo.filter.return_value = []  # product not found
 
-    order_data = {
-        "items": [{"product_id": 999, "quantity": 1}]
-    }
+    order_data = {"items": [{"product_id": 999, "quantity": 1}]}
 
     with pytest.raises(KeyError):  # current behavior — could change to ValueError in use case
         use_case.execute(order_data)

@@ -10,20 +10,10 @@ class CustomerRepository(CustomerRepositoryPort):
         self.session = session
 
     def _mapper_to_model(self, customer: CustomerMapper) -> CustomerModel:
-        return CustomerModel(
-            id=customer.id,
-            name=customer.name,
-            email=customer.email,
-            cpf=customer.cpf
-        )
+        return CustomerModel(id=customer.id, name=customer.name, email=customer.email, cpf=customer.cpf)
 
     def _model_to_mapper(self, instance: CustomerModel) -> CustomerMapper:
-        return CustomerMapper(
-            id=instance.id,
-            name=instance.name,
-            email=instance.email,
-            cpf=instance.cpf
-        )
+        return CustomerMapper(id=instance.id, name=instance.name, email=instance.email, cpf=instance.cpf)
 
     def save(self, customer: CustomerMapper) -> CustomerMapper:
         instance = self._mapper_to_model(customer)

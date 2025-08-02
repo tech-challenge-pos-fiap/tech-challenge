@@ -20,18 +20,18 @@ class CreateOrderUseCase:
 
     def execute(self, order_data: dict) -> Order:
         """Create a new order."""
-        product_ids = [item['product_id'] for item in order_data['items']]
+        product_ids = [item["product_id"] for item in order_data["items"]]
         products = self.product_repository.filter(id=product_ids)
         product_map = {product.id: product for product in products}
 
         order_items = []
-        for item in order_data['items']:
-            product = product_map[item['product_id']]
-            order_items.append(OrderItem(product=product, quantity=item['quantity']))
+        for item in order_data["items"]:
+            product = product_map[item["product_id"]]
+            order_items.append(OrderItem(product=product, quantity=item["quantity"]))
 
         customer: Optional[Customer] = None
-        if 'customer_id' in order_data:
-            customer = self.customer_repository.get(order_data.get('customer_id'))
+        if "customer_id" in order_data:
+            customer = self.customer_repository.get(order_data.get("customer_id"))
 
         order = Order.create(order_items, customer)
         return self.order_repository.save(order)

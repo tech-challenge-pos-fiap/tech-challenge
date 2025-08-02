@@ -17,7 +17,7 @@ class PaymentMapper:
     id: Optional[int] = field(default=None)
 
     @classmethod
-    def from_entity(cls, payment) -> 'PaymentMapper':
+    def from_entity(cls, payment) -> "PaymentMapper":
         return cls(
             id=payment.id,
             transaction_amount=payment.transaction_amount,
@@ -25,7 +25,7 @@ class PaymentMapper:
             status=payment.status,
             description=payment.description,
             paid_at=payment.paid_at,
-            order_id=payment.order_id
+            order_id=payment.order_id,
         )
 
     def to_entity(self) -> Payment:
@@ -36,5 +36,5 @@ class PaymentMapper:
             status=self.status,
             description=self.description,
             paid_at=self.paid_at,
-            order_id=self.order_id
+            order_id=self.order_id,
         )
