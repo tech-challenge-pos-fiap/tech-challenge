@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
-from app.adapters.persistence.models.base import Base
-from app.config.db import get_db
+from app.config.database import get_database_session
+from app.infrastructure.persistence.models.base import Base
 from main import app
 
 DATABASE_URL = "sqlite:///./tests/test.db"
@@ -19,7 +19,7 @@ if not database_exists(engine.url):
 Base.metadata.create_all(bind=engine)
 
 
-def override_get_db():
+def override_get_database_session():
     db = TestingSessionLocal()
     try:
         yield db
@@ -27,7 +27,7 @@ def override_get_db():
         db.close()
 
 
-app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[get_database_session] = override_get_database_session
 
 
 @pytest.fixture
