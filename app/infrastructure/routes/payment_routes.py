@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.adapters.controllers.payments.get_payment_by_id_controller import GetPaymentByIdController
 from app.adapters.controllers.payments.get_payments_by_order_id_controller import GetPaymentsByOrderIdController
@@ -25,8 +25,11 @@ def process_payment(
     payment_data: ProcessPaymentRequest,
     controller: ProcessPaymentController = Depends(get_process_payment_controller),
 ):
-    response = controller.execute(payment_data.model_dump())
-    return response
+    try:
+        response = controller.execute(payment_data.model_dump())
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.post("/webhook", status_code=200, response_model=WebhookResponse)
@@ -44,7 +47,10 @@ def get_payment_by_id(
     payment_id: int,
     controller: GetPaymentByIdController = Depends(get_get_payment_by_id_controller),
 ):
-    return controller.execute(payment_id)
+    try:
+        return controller.execute(payment_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
 
 
 @router.get("/order/{order_id}", response_model=list[PaymentResponse])
