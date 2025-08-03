@@ -1,3 +1,4 @@
+import os
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -14,6 +15,8 @@ from app.application.use_cases.payments.process_payment import ProcessPaymentUse
 from app.config.database import get_database_session
 from app.infrastructure.dependencies.order_dependencies import get_order_repository_gateway
 from app.infrastructure.external.external_payment_service import ExternalPaymentProcessService
+from app.infrastructure.external.mercado_pago_mock_service import MercadoPagoMockService
+from app.infrastructure.external.mercado_pago_real_service import MercadoPagoRealService
 from app.infrastructure.persistence.repositories.payment_repository import PaymentRepository
 
 
@@ -21,8 +24,19 @@ def get_payment_repository(session: Session = Depends(get_database_session)) -> 
     return PaymentRepository(session)
 
 
-def get_process_payment_service() -> ExternalPaymentProcessService:
+def get_payment_validation_service() -> ExternalPaymentProcessService:
+    """Get payment validation service instance."""
     return ExternalPaymentProcessService()
+
+
+def get_mercado_pago_service():
+    """Get Mercado Pago service instance."""
+    use_mock = os.getenv("USE_MP_MOCK", "true").lower() == "true"
+    
+    if use_mock:
+        return MercadoPagoMockService(success_rate=0.9)
+    else:
+        return MercadoPagoRealService()
 
 
 def get_payment_repository_gateway(
@@ -32,9 +46,10 @@ def get_payment_repository_gateway(
 
 
 def get_payment_service_gateway(
-    payment_service: PaymentServiceGateway = Depends(get_process_payment_service),
+    validation_service: ExternalPaymentProcessService = Depends(get_payment_validation_service),
+    mp_service = Depends(get_mercado_pago_service),
 ) -> PaymentServiceGateway:
-    return PaymentServiceGateway(payment_service)
+    return PaymentServiceGateway(validation_service, mp_service)
 
 
 def get_process_payment_use_case(
@@ -66,7 +81,7 @@ def get_get_payment_by_id_controller(
 ) -> GetPaymentByIdController:
     presenter = PaymentPresenter()
     return GetPaymentByIdController(
-        use_case=get_payment_by_id_use_case,
+        use_case=get_get_payment_by_id_use_case,
         presenter=presenter,
     )
 

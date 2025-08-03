@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-from typing import Optional
+from typing import Optional, Dict, Any
 
 
 class PaymentStatus(str, Enum):
@@ -30,6 +30,11 @@ class Payment:
     paid_at: datetime
     order_id: int
     id: Optional[int] = field(default=None)
+    # Mercado Pago fields
+    mp_payment_id: Optional[str] = field(default=None)
+    mp_status: Optional[str] = field(default=None)
+    mp_status_detail: Optional[str] = field(default=None)
+    mp_response: Optional[Dict[str, Any]] = field(default=None)
 
     @classmethod
     def create(
