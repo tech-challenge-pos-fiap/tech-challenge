@@ -1,4 +1,5 @@
 import os
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -16,7 +17,6 @@ from app.config.database import get_database_session
 from app.infrastructure.dependencies.order_dependencies import get_order_repository_gateway
 from app.infrastructure.external.external_payment_service import ExternalPaymentProcessService
 from app.infrastructure.external.mercado_pago_mock_service import MercadoPagoMockService
-from app.infrastructure.external.mercado_pago_real_service import MercadoPagoRealService
 from app.infrastructure.persistence.repositories.payment_repository import PaymentRepository
 
 
@@ -31,12 +31,7 @@ def get_payment_validation_service() -> ExternalPaymentProcessService:
 
 def get_mercado_pago_service():
     """Get Mercado Pago service instance."""
-    use_mock = os.getenv("USE_MP_MOCK", "true").lower() == "true"
-
-    if use_mock:
-        return MercadoPagoMockService(success_rate=0.9)
-    else:
-        return MercadoPagoRealService()
+    return MercadoPagoMockService(success_rate=0.9)
 
 
 def get_payment_repository_gateway(

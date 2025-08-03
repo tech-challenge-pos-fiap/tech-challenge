@@ -1,6 +1,7 @@
+from fastapi import HTTPException
+
 from app.adapters.presenters.payment_presenter import PaymentPresenter
 from app.application.use_cases.payments.get_payment_by_id import GetPaymentByIdUseCase
-from fastapi import HTTPException
 
 
 class GetPaymentByIdController:

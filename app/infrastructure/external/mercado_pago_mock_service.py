@@ -1,9 +1,10 @@
 import uuid
+import random
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
-from app.domain.ports.mercado_pago_service_port import MercadoPagoServicePort
 from app.domain.entities.payment import Payment
+from app.domain.ports.mercado_pago_service_port import MercadoPagoServicePort
 
 
 class MercadoPagoMockService(MercadoPagoServicePort):
@@ -17,23 +18,12 @@ class MercadoPagoMockService(MercadoPagoServicePort):
             success_rate: Probability of successful payment (0.0 to 1.0)
         """
         self.success_rate = success_rate
-        self._payments = {}  # Store mock payments for status queries
+        self._payments = {}
 
     def create_payment(self, payment: Payment) -> Dict[str, Any]:
         """Create a mock payment in Mercado Pago."""
-        import random
-
-        # Simulate network delay
-        import time
-
-        time.sleep(0.1)
-
-        # Generate mock payment ID
         mp_payment_id = f"mp_{uuid.uuid4().hex[:16]}"
-
-        # Simulate success/failure based on success_rate
         is_successful = random.random() < self.success_rate
-
         if is_successful:
             status = "approved"
             status_detail = "accredited"
@@ -41,7 +31,6 @@ class MercadoPagoMockService(MercadoPagoServicePort):
             status = "rejected"
             status_detail = "cc_rejected_bad_filled_security_code"
 
-        # Create mock response
         mock_response = {
             "id": mp_payment_id,
             "status": status,
@@ -73,7 +62,6 @@ class MercadoPagoMockService(MercadoPagoServicePort):
             },
         }
 
-        # Store payment for status queries
         self._payments[mp_payment_id] = mock_response
 
         return mock_response
@@ -107,7 +95,3 @@ class MercadoPagoMockService(MercadoPagoServicePort):
     def set_success_rate(self, success_rate: float) -> None:
         """Update the success rate for testing different scenarios."""
         self.success_rate = max(0.0, min(1.0, success_rate))
-
-    def clear_payments(self) -> None:
-        """Clear stored payments (useful for testing)."""
-        self._payments.clear()

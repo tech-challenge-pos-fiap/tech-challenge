@@ -1,4 +1,5 @@
 from decimal import Decimal
+
 from app.application.ports.orders.order_repository_gateway import OrderRepositoryGatewayPort
 from app.application.ports.payments.payment_repository_gateway import PaymentRepositoryGatewayPort
 from app.application.ports.payments.payment_service_gateway import PaymentServiceGatewayPort
@@ -25,6 +26,7 @@ class ProcessPaymentUseCase:
             order_id=payment_data["order_id"],
         )
         processed = self.payment_service.process_payment(payment)
+        print("processed, ", processed)
         if not processed:
             raise ValueError("Payment processing failed")
         return self.payment_repository.save(payment)

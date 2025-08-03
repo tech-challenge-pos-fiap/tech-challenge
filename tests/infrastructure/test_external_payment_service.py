@@ -1,5 +1,6 @@
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from app.infrastructure.external.external_payment_service import ExternalPaymentProcessService
 

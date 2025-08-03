@@ -1,10 +1,10 @@
 from dataclasses import asdict
-from typing import Dict, Any
+from typing import Any, Dict
 
 from app.adapters.gateways.services.payment_process_service import PaymentProcessServicePort
-from app.domain.ports.mercado_pago_service_port import MercadoPagoServicePort
 from app.application.ports.payments.payment_service_gateway import PaymentServiceGatewayPort
 from app.domain.entities.payment import Payment, PaymentStatus
+from app.domain.ports.mercado_pago_service_port import MercadoPagoServicePort
 
 
 class PaymentServiceGateway(PaymentServiceGatewayPort):
@@ -14,27 +14,22 @@ class PaymentServiceGateway(PaymentServiceGatewayPort):
 
     def process_payment(self, payment: Payment) -> bool:
         """Process payment using validation service and Mercado Pago."""
-        # First, validate the payment data
         payment_details = asdict(payment)
         validation_success = self.validation_service.process_payment(payment_details)
 
         if not validation_success:
-            # Payment validation failed
             payment.status = PaymentStatus.REJECTED
             payment.mp_response = {"error": "Payment validation failed"}
             return False
 
-        # Then, create payment in Mercado Pago
         try:
             mp_response = self.mp_service.create_payment(payment)
 
-            # Update payment with MP response data
             payment.mp_payment_id = mp_response.get("id")
             payment.mp_status = mp_response.get("status")
             payment.mp_status_detail = mp_response.get("status_detail")
             payment.mp_response = mp_response
 
-            # Update payment status based on MP response
             if mp_response.get("status") == "approved":
                 payment.status = PaymentStatus.APPROVED
             elif mp_response.get("status") in ["rejected", "cancelled"]:
@@ -45,10 +40,9 @@ class PaymentServiceGateway(PaymentServiceGatewayPort):
             return True
 
         except Exception as e:
-            # If MP fails, mark as in process for manual review
             payment.status = PaymentStatus.IN_PROCESS
             payment.mp_response = {"error": str(e)}
-            return False  # Return False to indicate processing failure
+            return False
 
     def get_payment_status(self, mp_payment_id: str) -> Dict[str, Any]:
         """Get payment status from Mercado Pago."""
