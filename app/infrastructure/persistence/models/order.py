@@ -11,7 +11,6 @@ from app.infrastructure.persistence.models.product import ProductModel
 from .base import Base, TimestampMixin
 
 
-
 class OrderStatus(enum.Enum):
     PENDING = 'pending'
     DELIVERED = 'delivered'
