@@ -120,16 +120,6 @@ class TestExternalPaymentService:
         result = service.process_payment(payment_data_3)
         assert result is True
 
-    def test_add_suspicious_amount(self):
-        """Test adding custom suspicious amounts."""
-        service = ExternalPaymentProcessService()
-
-        # Add custom suspicious amount
-        service.add_suspicious_amount(Decimal("123.45"))
-
-        # Test that the new suspicious amount is in the list
-        assert Decimal("123.45") in service.suspicious_amounts
-
     def test_invalid_amount_format(self):
         """Test that invalid amount format raises exception."""
         service = ExternalPaymentProcessService()

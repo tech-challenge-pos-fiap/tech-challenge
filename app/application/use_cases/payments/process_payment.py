@@ -26,7 +26,7 @@ class ProcessPaymentUseCase:
             order_id=payment_data["order_id"],
         )
         processed = self.payment_service.process_payment(payment)
-        print("processed, ", processed)
+
         if not processed:
             raise ValueError("Payment processing failed")
         return self.payment_repository.save(payment)
