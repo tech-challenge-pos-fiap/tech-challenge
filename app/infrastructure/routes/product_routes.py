@@ -12,6 +12,7 @@ from app.infrastructure.dependencies.product_dependencies import (
     get_list_products_by_category_controller,
     get_update_product_controller,
 )
+from app.infrastructure.persistence.models.product import ProductCategory
 from app.infrastructure.routes.schemas.product_schemas import CreateProductSchema, ProductResponseSchema
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -19,7 +20,7 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 @router.get("/{category}", response_model=List[ProductResponseSchema])
 def list_products_by_category(
-    category: str,
+    category: ProductCategory,
     skip: int = 0,
     limit: int = 10,
     controller: ListProductsByCategoryController = Depends(get_list_products_by_category_controller),
