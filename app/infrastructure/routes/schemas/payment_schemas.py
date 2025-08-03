@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -43,6 +43,34 @@ class PaymentResponse(BaseModel):
     payment_method: str = Field(..., description="ID do método de pagamento")
     order_id: int = Field(None, description="ID da ordem associada ao pagamento")
     paid_at: Optional[datetime] = None
+    mp_payment_id: Optional[str] = Field(None, description="Mercado Pago payment ID")
 
     class Config:
         from_attributes = True
+
+
+class WebhookData(BaseModel):
+    """Schema for Mercado Pago webhook data"""
+
+    id: str = Field(..., description="Mercado Pago payment ID")
+    status: str = Field(..., description="Payment status from Mercado Pago")
+    status_detail: Optional[str] = Field(None, description="Status detail from Mercado Pago")
+    transaction_amount: Optional[float] = Field(None, description="Transaction amount")
+    payment_method: Optional[Dict[str, Any]] = Field(None, description="Payment method information")
+    external_reference: Optional[str] = Field(None, description="External reference (order ID)")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "123456789",
+                "status": "approved",
+                "status_detail": "accredited",
+                "transaction_amount": 100.00,
+                "payment_method": {"type": "credit_card"},
+                "external_reference": "order_123",
+            }
+        }
+
+
+class WebhookResponse(BaseModel):
+    message: str = Field(..., description="Response message from webhook processing")

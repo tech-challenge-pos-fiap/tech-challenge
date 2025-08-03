@@ -1,3 +1,4 @@
+import uuid
 from decimal import Decimal
 
 from app.application.ports.orders.order_repository_gateway import OrderRepositoryGatewayPort
@@ -25,10 +26,10 @@ class ProcessPaymentUseCase:
             description=payment_data.get("description"),
             order_id=payment_data["order_id"],
         )
-        processed = self.payment_service.process_payment(payment)
 
-        if not processed:
-            raise ValueError("Payment processing failed")
+        mp_payment_id = f"mp_{uuid.uuid4().hex[:16]}"
+        payment.mp_payment_id = mp_payment_id
+
         return self.payment_repository.save(payment)
 
     def _validate_order(self, payment_data: dict) -> None:

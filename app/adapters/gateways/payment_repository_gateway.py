@@ -21,3 +21,8 @@ class PaymentRepositoryGateway(PaymentRepositoryGatewayPort):
     def get_payments_by_order_id(self, order_id: int) -> list[Payment]:
         payment_mappers = self.repository.get_payments_by_order_id(order_id)
         return [payment_mapper.to_entity() for payment_mapper in payment_mappers]
+
+    def get_payment_by_mp_id(self, mp_payment_id: str) -> Payment:
+        """Get payment by Mercado Pago ID."""
+        payment_mapper = self.repository.get_payment_by_mp_id(mp_payment_id)
+        return payment_mapper.to_entity() if payment_mapper else None

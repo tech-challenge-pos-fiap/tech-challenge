@@ -81,7 +81,6 @@ class ExternalPaymentProcessService(PaymentProcessServicePort):
 
         return True
 
-
     def set_amount_limits(self, min_amount: Decimal, max_amount: Decimal) -> None:
         """Set custom amount limits for validation."""
         self.min_amount = min_amount

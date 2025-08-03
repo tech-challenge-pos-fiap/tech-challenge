@@ -3,12 +3,19 @@ from fastapi import APIRouter, Depends
 from app.adapters.controllers.payments.get_payment_by_id_controller import GetPaymentByIdController
 from app.adapters.controllers.payments.get_payments_by_order_id_controller import GetPaymentsByOrderIdController
 from app.adapters.controllers.payments.process_payment_controller import ProcessPaymentController
+from app.adapters.controllers.payments.webhook_payment_controller import WebhookPaymentController
 from app.infrastructure.dependencies.payment_dependencies import (
     get_get_payment_by_id_controller,
     get_get_payments_by_order_id_controller,
     get_process_payment_controller,
+    get_webhook_payment_controller,
 )
-from app.infrastructure.routes.schemas.payment_schemas import PaymentResponse, ProcessPaymentRequest
+from app.infrastructure.routes.schemas.payment_schemas import (
+    PaymentResponse,
+    ProcessPaymentRequest,
+    WebhookData,
+    WebhookResponse,
+)
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
@@ -19,6 +26,16 @@ def process_payment(
     controller: ProcessPaymentController = Depends(get_process_payment_controller),
 ):
     response = controller.execute(payment_data.model_dump())
+    return response
+
+
+@router.post("/webhook", status_code=200, response_model=WebhookResponse)
+def webhook_payment(
+    webhook_data: WebhookData,
+    controller: WebhookPaymentController = Depends(get_webhook_payment_controller),
+):
+    """Webhook endpoint to receive payment status updates from Mercado Pago"""
+    response = controller.execute(webhook_data.model_dump())
     return response
 
 
