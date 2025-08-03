@@ -9,8 +9,10 @@ from app.domain.entities.product import Product
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
-    DELIVERED = "delivered"
-    CANCELED = "canceled"
+    RECEIVED = "received"
+    IN_PREPARATION = "in_preparation"
+    READY = "ready"
+    FINISHED = "finished"
 
 
 @dataclass
@@ -55,3 +57,6 @@ class Order:
             customer=customer,
             total_price=total_price,
         )
+
+    def update_status(self, new_status: OrderStatus) -> None:
+        self.status = new_status
