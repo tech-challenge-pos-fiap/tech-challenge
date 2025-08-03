@@ -49,6 +49,6 @@ def get_order_by_id(
 def update_order_status(
     order_id: int,
     payload: UpdateOrderStatusDTO,
-    controller: UpdateOrderStatusController = Depends(get_update_order_status_controller)
+    controller: UpdateOrderStatusController = Depends(get_update_order_status_controller),
 ):
     return controller.execute(order_id, payload)

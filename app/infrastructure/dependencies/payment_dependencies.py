@@ -32,7 +32,7 @@ def get_payment_validation_service() -> ExternalPaymentProcessService:
 def get_mercado_pago_service():
     """Get Mercado Pago service instance."""
     use_mock = os.getenv("USE_MP_MOCK", "true").lower() == "true"
-    
+
     if use_mock:
         return MercadoPagoMockService(success_rate=0.9)
     else:
@@ -47,7 +47,7 @@ def get_payment_repository_gateway(
 
 def get_payment_service_gateway(
     validation_service: ExternalPaymentProcessService = Depends(get_payment_validation_service),
-    mp_service = Depends(get_mercado_pago_service),
+    mp_service=Depends(get_mercado_pago_service),
 ) -> PaymentServiceGateway:
     return PaymentServiceGateway(validation_service, mp_service)
 

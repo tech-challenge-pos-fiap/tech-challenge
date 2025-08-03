@@ -33,7 +33,7 @@ class ProcessPaymentUseCase:
         order_id = payment_data["order_id"]
         if isinstance(order_id, str):
             order_id = int(order_id)
-        
+
         order = self.order_repository.get(order_id)
 
         if not order:
@@ -49,7 +49,7 @@ class ProcessPaymentUseCase:
 
         transaction_amount = Decimal(str(payment_data["transaction_amount"]))
         order_total_price = Decimal(str(order.total_price))
-        
+
         if order_total_price != transaction_amount:
             raise ValueError(
                 f"""

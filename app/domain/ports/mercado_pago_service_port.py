@@ -6,7 +6,7 @@ from app.domain.entities.payment import Payment
 
 class MercadoPagoServicePort(ABC):
     """Port for Mercado Pago service in Domain Layer."""
-    
+
     @abstractmethod
     def create_payment(self, payment: Payment) -> Dict[str, Any]:
         """Create a payment in Mercado Pago and return the response."""
@@ -20,4 +20,4 @@ class MercadoPagoServicePort(ABC):
     @abstractmethod
     def refund_payment(self, mp_payment_id: str, amount: Optional[float] = None) -> Dict[str, Any]:
         """Refund a payment in Mercado Pago."""
-        pass 
+        pass

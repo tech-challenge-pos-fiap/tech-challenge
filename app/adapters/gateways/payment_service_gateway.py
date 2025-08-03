@@ -8,11 +8,7 @@ from app.domain.entities.payment import Payment, PaymentStatus
 
 
 class PaymentServiceGateway(PaymentServiceGatewayPort):
-    def __init__(
-        self, 
-        validation_service: PaymentProcessServicePort,
-        mp_service: MercadoPagoServicePort
-    ):
+    def __init__(self, validation_service: PaymentProcessServicePort, mp_service: MercadoPagoServicePort):
         self.validation_service = validation_service
         self.mp_service = mp_service
 
@@ -21,23 +17,23 @@ class PaymentServiceGateway(PaymentServiceGatewayPort):
         # First, validate the payment data
         payment_details = asdict(payment)
         validation_success = self.validation_service.process_payment(payment_details)
-        
+
         if not validation_success:
             # Payment validation failed
             payment.status = PaymentStatus.REJECTED
             payment.mp_response = {"error": "Payment validation failed"}
             return False
-        
+
         # Then, create payment in Mercado Pago
         try:
             mp_response = self.mp_service.create_payment(payment)
-            
+
             # Update payment with MP response data
             payment.mp_payment_id = mp_response.get("id")
             payment.mp_status = mp_response.get("status")
             payment.mp_status_detail = mp_response.get("status_detail")
             payment.mp_response = mp_response
-            
+
             # Update payment status based on MP response
             if mp_response.get("status") == "approved":
                 payment.status = PaymentStatus.APPROVED
@@ -45,19 +41,19 @@ class PaymentServiceGateway(PaymentServiceGatewayPort):
                 payment.status = PaymentStatus.REJECTED
             else:
                 payment.status = PaymentStatus.IN_PROCESS
-            
+
             return True
-            
+
         except Exception as e:
             # If MP fails, mark as in process for manual review
             payment.status = PaymentStatus.IN_PROCESS
             payment.mp_response = {"error": str(e)}
             return False  # Return False to indicate processing failure
-    
+
     def get_payment_status(self, mp_payment_id: str) -> Dict[str, Any]:
         """Get payment status from Mercado Pago."""
         return self.mp_service.get_payment_status(mp_payment_id)
-    
+
     def refund_payment(self, mp_payment_id: str, amount: float = None) -> Dict[str, Any]:
         """Refund a payment in Mercado Pago."""
         return self.mp_service.refund_payment(mp_payment_id, amount)
