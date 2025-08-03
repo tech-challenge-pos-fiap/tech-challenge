@@ -4,15 +4,15 @@ from sqlalchemy.orm import Session
 from app.adapters.controllers.orders.create_order_controller import CreateOrderController
 from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrdersController
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
+from app.adapters.controllers.orders.update_order_status_controller import UpdateOrderStatusController
 from app.adapters.gateways.customer_repository_gateway import CustomerRepositoryGateway
-from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway, OrderRepositoryGatewayPort
+from app.adapters.gateways.order_repository_gateway import OrderRepositoryGateway
 from app.adapters.gateways.product_repository_gateway import ProductRepositoryGateway
 from app.adapters.presenters.order_presenter import OrderPresenter
-from app.application.use_cases.orders.checkout_order import CheckoutOrder
 from app.application.use_cases.orders.create_order import CreateOrderUseCase
 from app.application.use_cases.orders.get_all_orders import GetAllOrdersUseCase
 from app.application.use_cases.orders.get_order_by_id import GetOrderByIdUseCase
-from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
+from app.application.use_cases.orders.update_order_status import UpdateOrderStatusUseCase
 from app.config.database import get_database_session
 from app.infrastructure.dependencies.customer_dependencies import get_customer_repository_gateway
 from app.infrastructure.dependencies.product_dependencies import get_product_repository_gateway
@@ -53,6 +53,12 @@ def get_get_order_by_id_use_case(
     return GetOrderByIdUseCase(order_repository_gateway)
 
 
+def get_update_order_status_use_case(
+    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
+) -> UpdateOrderStatusUseCase:
+    return UpdateOrderStatusUseCase(order_repository_gateway)
+
+
 def get_get_all_orders_controller(
     use_case: GetAllOrdersUseCase = Depends(get_get_all_orders_use_case),
 ) -> GetAllOrdersController:
@@ -73,12 +79,9 @@ def get_get_order_by_id_controller(
     presenter = OrderPresenter()
     return GetOrderByIdController(use_case, presenter)
 
-def get_update_order_status_use_case(
-    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
-) -> UpdateOrderStatus:
-    return UpdateOrderStatus(order_repository_gateway)
 
-def get_checkout_order_use_case(
-    order_repository_gateway: OrderRepositoryGateway = Depends(get_order_repository_gateway),
-) -> CheckoutOrder:
-    return CheckoutOrder(order_repository_gateway)
+def get_update_order_status_controller(
+    use_case: UpdateOrderStatusUseCase = Depends(get_update_order_status_use_case),
+) -> UpdateOrderStatusUseCase:
+    presenter = OrderPresenter()
+    return UpdateOrderStatusController(use_case, presenter)

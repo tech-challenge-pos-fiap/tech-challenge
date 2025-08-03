@@ -1,7 +1,6 @@
 from app.adapters.gateways.repositories.mappers.order_mapper import OrderMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
 from app.application.ports.orders.order_repository_gateway import OrderRepositoryGatewayPort
-from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
 from app.domain.entities.order import Order
 
 
@@ -34,10 +33,6 @@ class OrderRepositoryGateway(OrderRepositoryGatewayPort):
         updated_order = self.repository.update_status(order_id, status)
         return updated_order.to_entity() if updated_order else None
 
-    def checkout(self, order_id: str) -> Order:
-        checked_out_order = self.repository.checkout(order_id)
-        return checked_out_order.to_entity() if checked_out_order else None
-
     def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[Order]:
         order_mappers = self.repository.get_by_customer_id(customer_id, skip, limit)
         return [mapper.to_entity() for mapper in order_mappers]
@@ -45,9 +40,3 @@ class OrderRepositoryGateway(OrderRepositoryGatewayPort):
     def get_by_status(self, status: str, skip: int = 0, limit: int = 10) -> list[Order]:
         order_mappers = self.repository.get_by_status(status, skip, limit)
         return [mapper.to_entity() for mapper in order_mappers]
-
-    def count_orders(self) -> int:
-        return self.repository.count_orders()
-
-    def exists(self, order_id: str) -> bool:
-        return self.repository.exists(order_id)

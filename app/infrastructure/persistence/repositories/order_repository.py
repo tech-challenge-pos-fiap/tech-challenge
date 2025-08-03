@@ -1,11 +1,11 @@
+from sqlalchemy import case
 from sqlalchemy.orm import Session
 
 from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.adapters.gateways.repositories.mappers.order_mapper import OrderItemMapper, OrderMapper
 from app.adapters.gateways.repositories.mappers.product_mapper import ProductMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
-from app.application.use_cases.orders.update_order_status import UpdateOrderStatus
-from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel
+from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel, OrderStatus
 
 
 class OrderRepository(OrderRepositoryPort):
@@ -14,6 +14,7 @@ class OrderRepository(OrderRepositoryPort):
 
     def _mapper_to_model(self, order: OrderMapper) -> OrderModel:
         return OrderModel(
+            id=order.id,
             customer_id=order.customer.id if order.customer else None,
             status=order.status,
             total_price=order.total_price,
@@ -65,9 +66,14 @@ class OrderRepository(OrderRepositoryPort):
         if not order_model:
             return None
 
-        for key, value in order_data.__dict__.items():
-            if value is not None:
-                setattr(order_model, key, value)
+        order_model.customer_id = order_data.customer.id
+        order_model.status = order_data.status
+        order_model.total_price = order_data.total_price
+
+        order_model.items = [
+            OrderItemModel(product_id=item.product.id, quantity=item.quantity)
+            for item in order_data.items
+        ]
 
         self.session.commit()
         self.session.refresh(order_model)
@@ -75,15 +81,15 @@ class OrderRepository(OrderRepositoryPort):
 
     def get_all(self, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         status_order = case(
-            (OrderModel.status == 'READY', 1),
-            (OrderModel.status == 'IN_PREPARATION', 2),
-            (OrderModel.status == 'RECEIVED', 3),
+            (OrderModel.status == OrderStatus.PENDING, 1),
+            (OrderModel.status == OrderStatus.IN_PREPARATION, 2),
+            (OrderModel.status == OrderStatus.RECEIVED, 3),
             else_=4
         )
 
         query = (
             self.session.query(OrderModel)
-            .filter(OrderModel.status != 'FINISHED')
+            .filter(OrderModel.status != OrderStatus.FINISHED)
             .order_by(status_order, OrderModel.created_at.asc())
             .offset(skip)
             .limit(limit)
@@ -110,18 +116,6 @@ class OrderRepository(OrderRepositoryPort):
         self.session.refresh(order_model)
         return self._model_to_mapper(order_model)
 
-    def checkout(self, order_id: str) -> OrderMapper:
-        order_model = self.session.query(OrderModel).filter(OrderModel.id == order_id).first()
-        if not order_model:
-            return None
-
-        # Here you would implement the logic for checking out the order
-        # For example, updating the status to 'checked_out'
-        order_model.status = 'checked_out'
-        self.session.commit()
-        self.session.refresh(order_model)
-        return self._model_to_mapper(order_model)
-
     def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         order_models = (
         self.session.query(OrderModel)
@@ -139,9 +133,3 @@ class OrderRepository(OrderRepositoryPort):
         .limit(limit)
         .all())
         return [self._model_to_mapper(order_model) for order_model in order_models]
-
-    def count_orders(self) -> int:
-        return self.session.query(OrderModel).count()
-
-    def exists(self, order_id: str) -> bool:
-        return self.session.query(OrderModel.id).filter(OrderModel.id == order_id).scalar() is not None

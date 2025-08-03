@@ -11,14 +11,12 @@ from app.infrastructure.persistence.models.product import ProductModel
 from .base import Base, TimestampMixin
 
 
-class OrderStatus(enum.Enum):
-    PENDING = 'pending'
-    DELIVERED = 'delivered'
-    CANCELED = 'canceled'
-    RECEIVED = 'received'
-    IN_PREPARATION = 'in_preparation'
-    READY = 'ready'
-    FINISHED = 'finished'
+class OrderStatus(str, Enum):
+    PENDING = "pending"
+    RECEIVED = "received"
+    IN_PREPARATION = "in_preparation"
+    READY = "ready"
+    FINISHED = "finished"
 
 
 class OrderItemModel(Base):
