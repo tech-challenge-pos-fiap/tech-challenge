@@ -1,5 +1,6 @@
 from app.adapters.presenters.payment_presenter import PaymentPresenter
 from app.application.use_cases.payments.get_payment_by_id import GetPaymentByIdUseCase
+from fastapi import HTTPException
 
 
 class GetPaymentByIdController:
@@ -9,4 +10,6 @@ class GetPaymentByIdController:
 
     def execute(self, payment_id):
         payment = self.use_case.execute(payment_id)
-        return self.presenter.present(payment) if payment else None
+        if not payment:
+            raise HTTPException(status_code=404, detail="Payment not found")
+        return self.presenter.present(payment)

@@ -6,19 +6,19 @@ from typing import Optional, Dict, Any
 
 
 class PaymentStatus(str, Enum):
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    CANCELLED = "cancelled"
-    REFUNDED = "refunded"
-    IN_PROCESS = "in_process"
-    ERROR = "error"
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    CANCELLED = "CANCELLED"
+    REFUNDED = "REFUNDED"
+    IN_PROCESS = "IN_PROCESS"
+    ERROR = "ERROR"
 
 
 class PaymentMethod(str, Enum):
-    PIX = "pix"
-    CREDIT_CARD = "credit_card"
-    BOLETO = "boleto"
+    PIX = "PIX"
+    CREDIT_CARD = "CREDIT_CARD"
+    BOLETO = "BOLETO"
 
 
 @dataclass
@@ -30,7 +30,6 @@ class Payment:
     paid_at: datetime
     order_id: int
     id: Optional[int] = field(default=None)
-    # Mercado Pago fields
     mp_payment_id: Optional[str] = field(default=None)
     mp_status: Optional[str] = field(default=None)
     mp_status_detail: Optional[str] = field(default=None)

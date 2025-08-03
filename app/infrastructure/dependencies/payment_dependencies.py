@@ -81,7 +81,7 @@ def get_get_payment_by_id_controller(
 ) -> GetPaymentByIdController:
     presenter = PaymentPresenter()
     return GetPaymentByIdController(
-        use_case=get_get_payment_by_id_use_case,
+        use_case=get_payment_by_id_use_case,
         presenter=presenter,
     )
 
