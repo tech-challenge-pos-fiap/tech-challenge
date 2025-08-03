@@ -13,8 +13,10 @@ from .base import Base, TimestampMixin
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
-    DELIVERED = "delivered"
-    CANCELED = "canceled"
+    RECEIVED = "received"
+    IN_PREPARATION = "in_preparation"
+    READY = "ready"
+    FINISHED = "finished"
 
 
 class OrderItemModel(Base):
@@ -27,6 +29,7 @@ class OrderItemModel(Base):
 
     order: Mapped["OrderModel"] = relationship("OrderModel", back_populates="items")
     product: Mapped["ProductModel"] = relationship("ProductModel")
+
 
 
 class OrderModel(TimestampMixin):

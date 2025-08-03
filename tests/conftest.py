@@ -20,11 +20,11 @@ Base.metadata.create_all(bind=engine)
 
 
 def override_get_database_session():
-    db = TestingSessionLocal()
+    session = TestingSessionLocal()
     try:
-        yield db
+        yield session
     finally:
-        db.close()
+        session.close()
 
 
 app.dependency_overrides[get_database_session] = override_get_database_session

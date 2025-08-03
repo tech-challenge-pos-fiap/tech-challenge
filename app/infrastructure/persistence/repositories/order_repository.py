@@ -1,10 +1,11 @@
+from sqlalchemy import case
 from sqlalchemy.orm import Session
 
 from app.adapters.gateways.repositories.mappers.customer_mapper import CustomerMapper
 from app.adapters.gateways.repositories.mappers.order_mapper import OrderItemMapper, OrderMapper
 from app.adapters.gateways.repositories.mappers.product_mapper import ProductMapper
 from app.adapters.gateways.repositories.order_repository_port import OrderRepositoryPort
-from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel
+from app.infrastructure.persistence.models.order import OrderItemModel, OrderModel, OrderStatus
 
 
 class OrderRepository(OrderRepositoryPort):
@@ -13,6 +14,7 @@ class OrderRepository(OrderRepositoryPort):
 
     def _mapper_to_model(self, order: OrderMapper) -> OrderModel:
         return OrderModel(
+            id=order.id,
             customer_id=order.customer.id if order.customer else None,
             status=order.status,
             total_price=order.total_price,
@@ -64,14 +66,70 @@ class OrderRepository(OrderRepositoryPort):
         if not order_model:
             return None
 
-        for key, value in order_data.__dict__.items():
-            if value is not None:
-                setattr(order_model, key, value)
+        order_model.customer_id = order_data.customer.id
+        order_model.status = order_data.status
+        order_model.total_price = order_data.total_price
+
+        order_model.items = [
+            OrderItemModel(product_id=item.product.id, quantity=item.quantity)
+            for item in order_data.items
+        ]
 
         self.session.commit()
         self.session.refresh(order_model)
         return self._model_to_mapper(order_model)
 
     def get_all(self, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
-        order_models = self.session.query(OrderModel).offset(skip).limit(limit).all()
+        status_order = case(
+            (OrderModel.status == OrderStatus.PENDING, 1),
+            (OrderModel.status == OrderStatus.IN_PREPARATION, 2),
+            (OrderModel.status == OrderStatus.RECEIVED, 3),
+            else_=4
+        )
+
+        query = (
+            self.session.query(OrderModel)
+            .filter(OrderModel.status != OrderStatus.FINISHED)
+            .order_by(status_order, OrderModel.created_at.asc())
+            .offset(skip)
+            .limit(limit)
+        )
+        order_models = query.all()
+        return [self._model_to_mapper(order_model) for order_model in order_models]
+
+    def delete(self, order_id: str) -> bool:
+        order_model = self.session.query(OrderModel).filter(OrderModel.id == order_id).first()
+        if not order_model:
+            return False
+
+        self.session.delete(order_model)
+        self.session.commit()
+        return True
+
+    def update_status(self, order_id: str, status: str) -> OrderMapper:
+        order_model = self.session.query(OrderModel).filter(OrderModel.id == order_id).first()
+        if not order_model:
+            return None
+
+        order_model.status = status
+        self.session.commit()
+        self.session.refresh(order_model)
+        return self._model_to_mapper(order_model)
+
+    def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
+        order_models = (
+        self.session.query(OrderModel)
+        .filter(OrderModel.customer_id == customer_id)
+        .offset(skip)
+        .limit(limit)
+        .all())
+        return [self._model_to_mapper(order_model) for order_model in order_models]
+
+    def get_by_status(self, status: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
+        order_models = (
+        self.session.query(OrderModel)
+        .filter(OrderModel.status == status)
+        .offset(skip)
+        .limit(limit)
+        .all())
         return [self._model_to_mapper(order_model) for order_model in order_models]

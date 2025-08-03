@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends
 
+from app.adapters.controllers.dtos.order_dtos import UpdateOrderStatusDTO
 from app.adapters.controllers.orders.create_order_controller import CreateOrderController
 from app.adapters.controllers.orders.get_all_orders_controller import GetAllOrdersController
 from app.adapters.controllers.orders.get_order_by_id_controller import GetOrderByIdController
+from app.adapters.controllers.orders.update_order_status_controller import UpdateOrderStatusController
 from app.infrastructure.dependencies.order_dependencies import (
     get_create_order_controller,
     get_get_all_orders_controller,
     get_get_order_by_id_controller,
+    get_update_order_status_controller,
 )
 from app.infrastructure.routes.schemas.order_schemas import (
     CreateOrderRequestSchema,
@@ -40,3 +43,12 @@ def get_order_by_id(
     controller: GetOrderByIdController = Depends(get_get_order_by_id_controller),
 ):
     return controller.execute(order_id)
+
+
+@router.put("/{order_id}/status", response_model=OrderSchema)
+def update_order_status(
+    order_id: int,
+    payload: UpdateOrderStatusDTO,
+    controller: UpdateOrderStatusController = Depends(get_update_order_status_controller)
+):
+    return controller.execute(order_id, payload)
