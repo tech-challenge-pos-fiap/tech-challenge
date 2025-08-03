@@ -6,7 +6,6 @@ from app.domain.value_objects.cpf import CPF
 
 
 class CustomerRepositoryGatewayPort(ABC):
-
     @abstractmethod
     def save(self, customer: Customer) -> Customer:
         """Persist a customer and return it (possibly with ID populated)."""

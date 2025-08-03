@@ -27,12 +27,12 @@ class OrderItem:
 class Order:
     items: list[OrderItem]
     customer: Optional[Customer] = None
-    total_price: Decimal = field(default=Decimal('0.00'))
+    total_price: Decimal = field(default=Decimal("0.00"))
     status: OrderStatus = field(default=OrderStatus.PENDING)
     id: Optional[int] = field(default=None)
 
     @classmethod
-    def create(cls, items: list[OrderItem], customer: Optional[Customer] = None) -> 'Order':
+    def create(cls, items: list[OrderItem], customer: Optional[Customer] = None) -> "Order":
         """
         Create a new order with the specified items and optional customer.
 

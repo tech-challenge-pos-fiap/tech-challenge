@@ -14,7 +14,7 @@ class UpdateProductController:
             description=product_data.description,
             price=product_data.price,
             category=product_data.category,
-            image_path=product_data.image_path
+            image_path=product_data.image_path,
         )
         updated_product = self.use_case.execute(product_id, product)
         return self.presenter.present(updated_product)

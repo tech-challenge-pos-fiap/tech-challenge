@@ -11,8 +11,12 @@ from app.domain.entities.product import Product
 @pytest.fixture
 def product():
     return Product(
-        id=1, name="Burger", price=Decimal("30.00"),
-        description="Beef burger", category="burguers", image_path="burger.jpg"
+        id=1,
+        name="Burger",
+        price=Decimal("30.00"),
+        description="Beef burger",
+        category="burguers",
+        image_path="burger.jpg",
     )
 
 
@@ -38,12 +42,20 @@ def test_order_creation_fails_with_empty_items():
 
 def test_order_total_price_with_multiple_items():
     p1 = Product(
-        id=1, name="Burger", price=Decimal("30.00"),
-        description="Beef burger", category="burguers", image_path="burger.jpg"
+        id=1,
+        name="Burger",
+        price=Decimal("30.00"),
+        description="Beef burger",
+        category="burguers",
+        image_path="burger.jpg",
     )
     p2 = Product(
-        id=2, name="Fries", price=Decimal("10.00"),
-        description="French fries", category="appetizers", image_path="fries.jpg"
+        id=2,
+        name="Fries",
+        price=Decimal("10.00"),
+        description="French fries",
+        category="appetizers",
+        image_path="fries.jpg",
     )
     items = [
         OrderItem(product=p1, quantity=1),

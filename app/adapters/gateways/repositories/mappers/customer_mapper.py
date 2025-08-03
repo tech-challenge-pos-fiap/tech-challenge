@@ -11,18 +11,10 @@ class CustomerMapper:
     cpf: str
 
     @classmethod
-    def from_entity(cls, customer: Customer) -> 'CustomerMapper':
+    def from_entity(cls, customer: Customer) -> "CustomerMapper":
         return cls(
-            id=customer.id,
-            name=customer.name,
-            email=customer.email,
-            cpf=customer.cpf.value if customer.cpf else None
+            id=customer.id, name=customer.name, email=customer.email, cpf=customer.cpf.value if customer.cpf else None
         )
 
     def to_entity(self) -> Customer:
-        return Customer(
-            id=self.id,
-            name=self.name,
-            email=self.email,
-            cpf=self.cpf
-        )
+        return Customer(id=self.id, name=self.name, email=self.email, cpf=self.cpf)

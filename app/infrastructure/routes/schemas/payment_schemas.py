@@ -9,8 +9,8 @@ class Identification(BaseModel):
     type: Optional[str] = Field(None, description="Tipo de identificação (CPF, CNPJ)")
     number: Optional[str] = Field(
         None,
-        pattern=r'^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$',
-        description="Número do documento (somente CPF, com ou sem pontuação)"
+        pattern=r"^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$",
+        description="Número do documento (somente CPF, com ou sem pontuação)",
     )
 
 
@@ -20,21 +20,9 @@ class Payer(BaseModel):
 
 
 class ProcessPaymentRequest(BaseModel):
-    transaction_amount: Decimal = Field(
-        ...,
-        gt=0,
-        description="Valor da transação (deve ser maior que zero)"
-    )
-    description: Optional[str] = Field(
-        None,
-        min_length=1,
-        max_length=256,
-        description="Descrição do pagamento"
-    )
-    order_id: Optional[int] = Field(
-        None,
-        description="ID da ordem associada ao pagamento"
-    )
+    transaction_amount: Decimal = Field(..., gt=0, description="Valor da transação (deve ser maior que zero)")
+    description: Optional[str] = Field(None, min_length=1, max_length=256, description="Descrição do pagamento")
+    order_id: Optional[int] = Field(None, description="ID da ordem associada ao pagamento")
     payer: Optional[Payer] = Field(None, description="Informações do pagador")
 
     class Config:
@@ -43,13 +31,7 @@ class ProcessPaymentRequest(BaseModel):
                 "transaction_amount": 100,
                 "description": "Título do produto",
                 "order_id": 1,
-                "payer": {
-                    "email": "teste@email.com",
-                    "identification": {
-                        "type": "CPF",
-                        "number": "191.191.191-00"
-                    }
-                }
+                "payer": {"email": "teste@email.com", "identification": {"type": "CPF", "number": "191.191.191-00"}},
             }
         }
 
