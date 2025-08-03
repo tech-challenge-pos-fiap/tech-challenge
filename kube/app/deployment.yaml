@@ -22,6 +22,11 @@ spec:
                 name: app-config
             - secretRef:
                 name: app-secret
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 500m
       initContainers:
         - name: alembic-migrations
           image: psilva009/tech-challenge-api
