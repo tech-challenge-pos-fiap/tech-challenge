@@ -3,7 +3,7 @@
 # Nome do container do serviço FastAPI
 CONTAINER=fastapi
 
-# variables to kube setuo
+# variables to kube setup
 KUBE_DIR := kube
 APP_DIR := $(KUBE_DIR)/app
 DB_DIR := $(KUBE_DIR)/db
