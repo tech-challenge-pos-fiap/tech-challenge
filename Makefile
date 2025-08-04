@@ -8,6 +8,8 @@ KUBE_DIR := kube
 APP_DIR := $(KUBE_DIR)/app
 DB_DIR := $(KUBE_DIR)/db
 SERVICE_NAME := api-service
+APP_ENV_FILE := envs/app.env
+DB_ENV_FILE := envs/postgres.env
 
 # Cria uma nova migration (exemplo de uso: make migration name="add_nova_tabela")
 migration:
@@ -48,3 +50,16 @@ setup-kube:
 	kubectl apply -f $(APP_DIR)
 	@echo "🌐 Exposing service $(SERVICE_NAME)..."
 	@minikube service $(SERVICE_NAME)
+
+generate-manifests:
+	@echo "📄 Replacing env variables directly in $(DB_DIR) and $(APP_DIR)..."
+	set -a; \
+	source $(APP_ENV_FILE); \
+	source $(DB_ENV_FILE); \
+	set +a; \
+	for file in $(DB_DIR)/*.yaml; do \
+		envsubst < $$file > $$file.tmp && mv $$file.tmp $$file; \
+	done; \
+	for file in $(APP_DIR)/*.yaml; do \
+		envsubst < $$file > $$file.tmp && mv $$file.tmp $$file; \
+	done
