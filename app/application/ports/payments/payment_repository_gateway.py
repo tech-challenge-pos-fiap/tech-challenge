@@ -18,3 +18,8 @@ class PaymentRepositoryGatewayPort(ABC):
     def get_payments_by_order_id(self, order_id: int) -> list[Payment]:
         """Retrieves a list of payment entities by order ID."""
         pass
+
+    @abstractmethod
+    def get_payment_by_mp_id(self, mp_payment_id: str) -> Payment:
+        """Retrieves a payment entity by Mercado Pago ID."""
+        pass

@@ -36,6 +36,9 @@ class PaymentModel(TimestampMixin):
     )
     description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     paid_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    mp_payment_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    mp_status: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    mp_status_detail: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     mp_response: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
 
     order_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orders.id"), nullable=True)

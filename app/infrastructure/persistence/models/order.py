@@ -31,7 +31,6 @@ class OrderItemModel(Base):
     product: Mapped["ProductModel"] = relationship("ProductModel")
 
 
-
 class OrderModel(TimestampMixin):
     __tablename__ = "orders"
 

@@ -71,8 +71,7 @@ class OrderRepository(OrderRepositoryPort):
         order_model.total_price = order_data.total_price
 
         order_model.items = [
-            OrderItemModel(product_id=item.product.id, quantity=item.quantity)
-            for item in order_data.items
+            OrderItemModel(product_id=item.product.id, quantity=item.quantity) for item in order_data.items
         ]
 
         self.session.commit()
@@ -84,7 +83,7 @@ class OrderRepository(OrderRepositoryPort):
             (OrderModel.status == OrderStatus.PENDING, 1),
             (OrderModel.status == OrderStatus.IN_PREPARATION, 2),
             (OrderModel.status == OrderStatus.RECEIVED, 3),
-            else_=4
+            else_=4,
         )
 
         query = (
@@ -118,18 +117,12 @@ class OrderRepository(OrderRepositoryPort):
 
     def get_by_customer_id(self, customer_id: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         order_models = (
-        self.session.query(OrderModel)
-        .filter(OrderModel.customer_id == customer_id)
-        .offset(skip)
-        .limit(limit)
-        .all())
+            self.session.query(OrderModel).filter(OrderModel.customer_id == customer_id).offset(skip).limit(limit).all()
+        )
         return [self._model_to_mapper(order_model) for order_model in order_models]
 
     def get_by_status(self, status: str, skip: int = 0, limit: int = 10) -> list[OrderMapper]:
         order_models = (
-        self.session.query(OrderModel)
-        .filter(OrderModel.status == status)
-        .offset(skip)
-        .limit(limit)
-        .all())
+            self.session.query(OrderModel).filter(OrderModel.status == status).offset(skip).limit(limit).all()
+        )
         return [self._model_to_mapper(order_model) for order_model in order_models]

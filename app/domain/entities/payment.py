@@ -2,23 +2,23 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-from typing import Optional
+from typing import Any, Dict, Optional
 
 
 class PaymentStatus(str, Enum):
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    CANCELLED = "cancelled"
-    REFUNDED = "refunded"
-    IN_PROCESS = "in_process"
-    ERROR = "error"
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    CANCELLED = "CANCELLED"
+    REFUNDED = "REFUNDED"
+    IN_PROCESS = "IN_PROCESS"
+    ERROR = "ERROR"
 
 
 class PaymentMethod(str, Enum):
-    PIX = "pix"
-    CREDIT_CARD = "credit_card"
-    BOLETO = "boleto"
+    PIX = "PIX"
+    CREDIT_CARD = "CREDIT_CARD"
+    BOLETO = "BOLETO"
 
 
 @dataclass
@@ -30,6 +30,10 @@ class Payment:
     paid_at: datetime
     order_id: int
     id: Optional[int] = field(default=None)
+    mp_payment_id: Optional[str] = field(default=None)
+    mp_status: Optional[str] = field(default=None)
+    mp_status_detail: Optional[str] = field(default=None)
+    mp_response: Optional[Dict[str, Any]] = field(default=None)
 
     @classmethod
     def create(

@@ -9,4 +9,6 @@ class GetPaymentByIdController:
 
     def execute(self, payment_id):
         payment = self.use_case.execute(payment_id)
-        return self.presenter.present(payment) if payment else None
+        if not payment:
+            raise ValueError(f"Payment {payment_id} not found")
+        return self.presenter.present(payment)

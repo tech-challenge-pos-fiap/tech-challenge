@@ -1,3 +1,6 @@
+import uuid
+from decimal import Decimal
+
 from app.application.ports.orders.order_repository_gateway import OrderRepositoryGatewayPort
 from app.application.ports.payments.payment_repository_gateway import PaymentRepositoryGatewayPort
 from app.application.ports.payments.payment_service_gateway import PaymentServiceGatewayPort
@@ -23,13 +26,17 @@ class ProcessPaymentUseCase:
             description=payment_data.get("description"),
             order_id=payment_data["order_id"],
         )
-        processed = self.payment_service.process_payment(payment)
-        if not processed:
-            raise ValueError("Payment processing failed")
+
+        mp_payment_id = f"mp_{uuid.uuid4().hex[:16]}"
+        payment.mp_payment_id = mp_payment_id
+
         return self.payment_repository.save(payment)
 
     def _validate_order(self, payment_data: dict) -> None:
         order_id = payment_data["order_id"]
+        if isinstance(order_id, str):
+            order_id = int(order_id)
+
         order = self.order_repository.get(order_id)
 
         if not order:
@@ -43,10 +50,13 @@ class ProcessPaymentUseCase:
                 """
             )
 
-        if order.total_price != payment_data["transaction_amount"]:
+        transaction_amount = Decimal(str(payment_data["transaction_amount"]))
+        order_total_price = Decimal(str(order.total_price))
+
+        if order_total_price != transaction_amount:
             raise ValueError(
                 f"""
-                Payment amount {payment_data["transaction_amount"]}
-                does not match order total price {order.total_price}.
+                Payment amount {transaction_amount}
+                does not match order total price {order_total_price}.
                 """
             )
