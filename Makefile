@@ -54,8 +54,8 @@ setup-kube:
 generate-manifests:
 	@echo "📄 Replacing env variables directly in $(DB_DIR) and $(APP_DIR)..."
 	set -a; \
-	source $(APP_ENV_FILE); \
-	source $(DB_ENV_FILE); \
+	. $(APP_ENV_FILE); \
+	. $(DB_ENV_FILE); \
 	set +a; \
 	for file in $(DB_DIR)/*.yaml; do \
 		envsubst < $$file > $$file.tmp && mv $$file.tmp $$file; \
