@@ -19,33 +19,6 @@ O objetivo é desenvolver um **sistema de autoatendimento para uma lanchonete em
 - Kubectl (opcional, para orquestração com Kubernetes)
 
 ## 🚀 Como Iniciar o Projeto
-Clone o repositório:
-```sh
-git clone https://github.com/tech-challenge-pos-fiap/tech-challenge.git
-cd tech-challenge
-```
-Construa a imagem Docker:
-```sh
-make build
-```
-
-Rode as migrations do Alembic:
-```sh
-make migrate
-```
-
-Suba o container:
-```sh
-make up
-```
-O arquivo **Makefile** possui alguns outros comandos úteis para o projeto.
-
-Com o container rodando, você pode acessar a documentação da API através da URL:
-```url
-localhost:8000/docs
-```
-
-## 🚀 Como Iniciar o Projeto
 
 Clone o repositório:
 ```sh
@@ -154,3 +127,16 @@ Abaixo, a estrutura do projeto e uma breve explicação de cada diretório:
 ├── kube
 └── README.md
 ```
+## 🏗️ Desenho da Infraestrutura
+
+Abaixo está o desenho da infraestrutura do projeto, ilustrando os principais componentes e suas interações:
+
+![Desenho da Infraestrutura](docs/images/desenho-infraestrutura.jpeg)
+
+---
+
+## 🔁 Diagrama de Fluxo
+
+O diagrama de fluxo apresenta a sequência de processos e o caminho dos dados dentro do sistema:
+
+![Diagrama de Fluxo](docs/images/diagrama-de-fluxo.jpeg)
