@@ -65,6 +65,9 @@ api:
       cpu: 500m
 
 prometheus:
+  service:
+    type: NodePort
+    nodePort: 9000
   alertmanager:
     enabled: false
   server:
@@ -81,3 +84,12 @@ grafana:
   service:
     type: NodePort
     nodePort: 30090
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          url: http://tech-challenge-release-prometheus-server
+          access: proxy
+          isDefault: true
