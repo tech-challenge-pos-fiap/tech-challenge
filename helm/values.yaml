@@ -63,3 +63,21 @@ api:
       cpu: 100m
     limits:
       cpu: 500m
+
+prometheus:
+  alertmanager:
+    enabled: false
+  server:
+    serviceMonitor:
+      enabled: true
+      namespace: default
+      selector:
+        matchLabels:
+          app: api
+
+grafana:
+  adminUser: admin
+  adminPassword: admin
+  service:
+    type: NodePort
+    nodePort: 30090
