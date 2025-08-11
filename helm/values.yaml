@@ -1,0 +1,65 @@
+postgres:
+  name: postgres
+  replicas: 1
+  image:
+    repository: postgres
+    tag: 17.5
+    port: 5432
+    volumeMounts:
+      - name: pgdata
+        mountPath: /var/lib/postgresql/data
+    envs:
+      secrets: postgres-secret
+  volumes:
+    - name: pgdata
+      persistentVolumeClaim:
+        claimName: postgres-pvc
+  pvc:
+    name: postgres-pvc
+    accessModes:
+      - ReadWriteOnce
+    storage: 5Gi
+  secret:
+    name: postgres-secret
+    stringData:
+      POSTGRES_DB: tech-challenge
+      POSTGRES_USER: tech-challenge
+      POSTGRES_PASSWORD: tech-challenge
+  service:
+    name: postgres
+    port: 5432
+
+api:
+  namespace: default
+  name: api
+  replicas: 2
+  image:
+    repository: psilva009/tech-challenge-api
+    tag: latest
+    containerPort: 80
+  configMap:
+    name: app-config
+    data:
+      MP_PAYMENT_URL: "https://api.mercadopago.com/v1/payments"
+      MP_IDEMPOTENCY_KEY: "TEST-172ee772-80c7-4643-b5b0-be1656228162"
+  secret:
+    name: app-secret
+    stringData:
+      MP_ACCESS_TOKEN: TEST-4764637462089045-051118-dee7a50610a692dfc56357c172b61f07-201284269
+      DATABASE_URL: postgresql://tech-challenge:tech-challenge@postgres:5432/tech-challenge
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+  service:
+    name: api-service
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      cpu: 500m
