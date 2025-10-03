@@ -45,9 +45,7 @@ setup-kube:
 	@echo "📊 Enabling metrics-server addon..."
 	minikube addons enable metrics-server
 	@echo "📦 Applying DB manifests..."
-	kubectl apply -f $(DB_DIR)
-	@echo "🧩 Applying App manifests..."
-	kubectl apply -f $(APP_DIR)
+	helm upgrade --install tech-challenge-release helm/
 	@echo "🌐 Exposing service $(SERVICE_NAME)..."
 	@minikube service $(SERVICE_NAME)
 

@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  MP_PAYMENT_URL: "https://api.mercadopago.com/v1/payments"
-  MP_IDEMPOTENCY_KEY: "TEST-172ee772-80c7-4643-b5b0-be1656228162"
