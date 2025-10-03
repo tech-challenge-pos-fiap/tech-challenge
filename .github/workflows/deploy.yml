@@ -1,0 +1,70 @@
+name: Deploy App
+
+on:
+  push:
+    branches:
+      - dev
+      - stage
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPO: tech-challenge-repo
+  EKS_CLUSTER: tech-challenge-eks
+  HELM_RELEASE: tech-challenge-release
+  HELM_CHART_DIR: ./helm
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Config AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 3. Login no ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 4. Build & Push Docker image
+      - name: Build, Tag, and Push image
+        run: |
+          IMAGE_TAG=${GITHUB_SHA}
+          ECR_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO }}
+          echo "ECR_URI=$ECR_URI"
+          docker build -t $ECR_URI:$IMAGE_TAG .
+          docker push $ECR_URI:$IMAGE_TAG
+          echo "IMAGE=$ECR_URI:$IMAGE_TAG" >> $GITHUB_ENV
+
+      # 5. Configurar kubectl para o EKS
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
+
+      # 6. Deploy com Helm
+      - name: Helm Upgrade
+        run: |
+          NAMESPACE="default"
+          VALUES_FILE="helm/values-${GITHUB_REF_NAME}.yaml"
+
+          if [ ! -f "$VALUES_FILE" ]; then
+            echo "⚠️ Arquivo $VALUES_FILE não encontrado, usando helm/values.yaml"
+            VALUES_FILE="helm/values.yaml"
+          fi
+
+          helm upgrade --install ${{ env.HELM_RELEASE }} ${{ env.HELM_CHART_DIR }} \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --set api.image.repository=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO }} \
+            --set api.image.tag=${GITHUB_SHA} \
+            -f $VALUES_FILE
