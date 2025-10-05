@@ -7,6 +7,10 @@ on:
       - stage
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   AWS_REGION: us-east-1
   ECR_REPO: tech-challenge-repo
