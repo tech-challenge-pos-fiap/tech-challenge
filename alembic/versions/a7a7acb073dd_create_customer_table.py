@@ -30,7 +30,6 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cpf'),
-    sa.UniqueConstraint('email')
     )
     # ### end Alembic commands ###
 
