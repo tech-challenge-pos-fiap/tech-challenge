@@ -1,3 +1,4 @@
+{{- if .Values.postgres.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,3 +33,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .persistentVolumeClaim.claimName }}
         {{- end }}
+{{- end }}

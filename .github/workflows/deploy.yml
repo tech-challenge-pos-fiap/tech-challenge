@@ -54,20 +54,23 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
 
-      # 6. Deploy com Helm
+      # 6 Montar DATABASE_URL
+      - name: Build DATABASE_URL
+        run: |
+          DATABASE_URL="postgresql://${{ secrets.RDS_USERNAME }}:${{ secrets.RDS_PASSWORD }}@${{ secrets.RDS_HOST }}:${{ secrets.RDS_PORT }}/${{ secrets.RDS_DBNAME }}"
+          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+
+      # 7. Deploy com Helm
       - name: Helm Upgrade
         run: |
           NAMESPACE="default"
-          VALUES_FILE="helm/values-${GITHUB_REF_NAME}.yaml"
-
-          if [ ! -f "$VALUES_FILE" ]; then
-            echo "⚠️ Arquivo $VALUES_FILE não encontrado, usando helm/values.yaml"
-            VALUES_FILE="helm/values.yaml"
-          fi
+          VALUES_FILE="helm/overlays/values-${GITHUB_REF_NAME}.yaml"
 
           helm upgrade --install ${{ env.HELM_RELEASE }} ${{ env.HELM_CHART_DIR }} \
+            -f helm/values.yaml
+            -f $VALUES_FILE
             --namespace $NAMESPACE \
             --create-namespace \
             --set api.image.repository=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO }} \
             --set api.image.tag=${GITHUB_SHA} \
-            -f $VALUES_FILE
+            --set-string api.secret.stringData.DATABASE_URL="${{ env.DATABASE_URL }}" \
