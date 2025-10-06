@@ -21,7 +21,6 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: dev
 
     steps:
       # 1. Checkout
@@ -68,8 +67,8 @@ jobs:
           VALUES_FILE="helm/overlays/values-${GITHUB_REF_NAME}.yaml"
 
           helm upgrade --install ${{ env.HELM_RELEASE }} ${{ env.HELM_CHART_DIR }} \
-            -f helm/values.yaml
-            -f $VALUES_FILE
+            -f helm/values.yaml \
+            -f $VALUES_FILE \
             --namespace $NAMESPACE \
             --create-namespace \
             --set api.image.repository=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO }} \
