@@ -58,7 +58,7 @@ jobs:
       # 6 Montar DATABASE_URL
       - name: Build DATABASE_URL
         run: |
-          DATABASE_URL="postgresql://${{ secrets.RDS_USERNAME }}:${{ secrets.RDS_PASSWORD }}@${{ secrets.RDS_HOST }}:${{ secrets.RDS_PORT }}/${{ secrets.RDS_DBNAME }}"
+          DATABASE_URL="postgresql://${{ secrets.RDS_USERNAME }}:${{ secrets.RDS_PASSWORD }}@${{ secrets.RDS_ENDPOINT }}:${{ secrets.RDS_PORT }}/${{ secrets.RDS_DBNAME }}"
           echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
 
       # 7. Deploy com Helm
